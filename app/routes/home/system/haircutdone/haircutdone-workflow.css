@@ -1,0 +1,419 @@
+.haircutdone-workflow-root {
+  --haircutdone-workflow-board: #f3f1ea;
+  --haircutdone-workflow-node: #faf9f5;
+  --haircutdone-text-primary: #1f2b3a;
+  --haircutdone-text-secondary: #5f6b75;
+  --haircutdone-connector-solid: #8e928f;
+  --haircutdone-connector-dashed: #989d99;
+  --haircutdone-node-border-default: #1f2b3a;
+  --haircutdone-icon-default: #111820;
+  --haircutdone-cyan-primary: #21f1ff;
+  --haircutdone-cyan-electric: #00f5ff;
+  --haircutdone-cyan-halo: #b2ffff;
+  --haircutdone-cyan-mist: #dfffff;
+  --haircutdone-cyan-deep: #0f6e78;
+  --haircutdone-node-border-featured: #20a2b0;
+  --haircutdone-badge-default-background: #eefdfc;
+  --haircutdone-badge-default-border: #b2ffff;
+  --haircutdone-badge-featured-background: #e5fffe;
+  --haircutdone-badge-featured-border: #5bf7ff;
+  --haircutdone-signal-core: #f7ffff;
+  --haircutdone-signal-electric: #00f5ff;
+  --haircutdone-signal-primary: #21f1ff;
+  --haircutdone-signal-halo: #b2ffff;
+  --haircutdone-node-hover-scale: 1.015;
+  --haircutdone-node-featured-scale: 1.009;
+  --haircutdone-node-press-scale: 0.985;
+  --haircutdone-node-hover-lift: -1px;
+  --haircutdone-node-featured-lift: -0.6px;
+  --haircutdone-node-press-drop: 1px;
+  --haircutdone-press-duration: 55ms;
+  --haircutdone-release-duration: 110ms;
+  --haircutdone-hover-duration: 130ms;
+  --haircutdone-press-easing: cubic-bezier(0, 0, 0.2, 1);
+  --haircutdone-release-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  width: 100%;
+  max-width: 1248px;
+  margin-inline: auto;
+  color: #1f2b3a;
+  font-family: Nunito, system-ui, sans-serif;
+  font-synthesis: none;
+}
+
+.haircutdone-workflow-root,
+.haircutdone-workflow-root * {
+  box-sizing: border-box;
+}
+
+.haircutdone-workflow-board {
+  width: 100%;
+  max-width: 1248px;
+  margin-inline: auto;
+}
+
+.haircutdone-workflow-viewport {
+  width: 100%;
+  padding: 4.487179% 5.128205%;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--haircutdone-workflow-board);
+  box-shadow: inset 0 0 0 1px #2a2a2a, 0 24px 80px rgb(0 0 0 / 35%);
+}
+
+.haircutdone-workflow-canvas {
+  width: 100%;
+  aspect-ratio: 3980 / 2005.6584821479928;
+  background: var(--haircutdone-workflow-board);
+}
+
+.haircutdone-workflow-canvas > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--haircutdone-workflow-board);
+}
+
+.haircutdone-workflow-root svg text {
+  font-family: Nunito, system-ui, sans-serif;
+}
+
+.haircutdone-workflow-loading {
+  margin: 0;
+  padding: 40px;
+  color: var(--haircutdone-text-primary);
+}
+
+.haircutdone-workflow-node {
+  --haircutdone-node-state-duration: var(--haircutdone-release-duration);
+  --haircutdone-node-state-easing: var(--haircutdone-release-easing);
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.haircutdone-workflow-node * {
+  pointer-events: none;
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__hit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: all;
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__visual {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--haircutdone-node-state-duration) var(--haircutdone-node-state-easing);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__fill {
+  fill: var(--haircutdone-workflow-node);
+  stroke: none;
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__outline,
+.haircutdone-workflow-node .haircutdone-workflow-node__badge-outline {
+  fill: none;
+  stroke: var(--haircutdone-node-border-default);
+  stroke-opacity: 1;
+  transition: stroke var(--haircutdone-node-state-duration) var(--haircutdone-node-state-easing);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__shadow {
+  fill: none;
+  stroke: var(--haircutdone-node-border-default);
+  stroke-width: 8;
+  filter: url("#haircutdone-workflow-outline-shadow-default");
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__glow {
+  fill: none;
+  opacity: 0;
+  transition: opacity var(--haircutdone-node-state-duration) var(--haircutdone-node-state-easing);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__glow--large {
+  stroke: var(--haircutdone-cyan-halo);
+  stroke-width: 18;
+  filter: url("#haircutdone-workflow-outline-glow-large");
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__glow--near {
+  stroke: var(--haircutdone-cyan-primary);
+  stroke-width: 10;
+  filter: url("#haircutdone-workflow-outline-glow-near");
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__icon {
+  filter: url("#haircutdone-workflow-icon-default");
+  transition: filter var(--haircutdone-node-state-duration) var(--haircutdone-node-state-easing);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__title,
+.haircutdone-workflow-node .haircutdone-workflow-node__subtitle,
+.haircutdone-workflow-node .haircutdone-workflow-node__badge,
+.haircutdone-workflow-node .haircutdone-workflow-node__badge-text {
+  fill-opacity: 1;
+  stroke-opacity: 1;
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__title text {
+  fill: var(--haircutdone-text-primary);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__subtitle text {
+  fill: var(--haircutdone-text-secondary);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__badge-fill {
+  fill: var(--haircutdone-badge-default-background);
+  stroke: none;
+  transition: fill var(--haircutdone-node-state-duration) var(--haircutdone-node-state-easing);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__badge-outline {
+  stroke: var(--haircutdone-badge-default-border);
+}
+
+.haircutdone-workflow-node .haircutdone-workflow-node__badge-text text {
+  fill: var(--haircutdone-cyan-deep);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__visual {
+  transform: translateY(var(--haircutdone-node-featured-lift)) scale(var(--haircutdone-node-featured-scale));
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__outline {
+  stroke: var(--haircutdone-node-border-featured);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__icon {
+  filter: url("#haircutdone-workflow-icon-featured");
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__glow--large {
+  opacity: 0.33;
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__glow--near {
+  opacity: 0.54;
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__badge-fill {
+  fill: var(--haircutdone-badge-featured-background);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__badge-outline {
+  stroke: var(--haircutdone-badge-featured-border);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active {
+  --haircutdone-node-state-duration: var(--haircutdone-hover-duration);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__outline {
+  stroke: var(--haircutdone-cyan-primary);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__shadow {
+  filter: url("#haircutdone-workflow-outline-shadow-active");
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__glow--large {
+  opacity: 0.55;
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__glow--near {
+  opacity: 0.9;
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__icon {
+  filter: url("#haircutdone-workflow-icon-active");
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__badge-fill {
+  fill: var(--haircutdone-cyan-mist);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-journey-active .haircutdone-workflow-node__badge-outline {
+  stroke: var(--haircutdone-cyan-primary);
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) {
+  --haircutdone-node-state-duration: var(--haircutdone-hover-duration);
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__visual {
+  transform: translateY(var(--haircutdone-node-hover-lift)) scale(var(--haircutdone-node-hover-scale));
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__outline {
+  stroke: var(--haircutdone-cyan-primary);
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__shadow {
+  filter: url("#haircutdone-workflow-outline-shadow-active");
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__glow--large {
+  opacity: 0.55;
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__glow--near {
+  opacity: 0.9;
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__icon {
+  filter: url("#haircutdone-workflow-icon-active");
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__badge-fill {
+  fill: var(--haircutdone-cyan-mist);
+}
+
+.haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__badge-outline {
+  stroke: var(--haircutdone-cyan-primary);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-releasing {
+  --haircutdone-node-state-duration: var(--haircutdone-release-duration);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed {
+  --haircutdone-node-state-duration: var(--haircutdone-press-duration);
+  --haircutdone-node-state-easing: var(--haircutdone-press-easing);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__visual {
+  transform: translateY(var(--haircutdone-node-press-drop)) scale(var(--haircutdone-node-press-scale));
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__outline {
+  stroke: var(--haircutdone-node-border-default);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__shadow {
+  filter: url("#haircutdone-workflow-outline-shadow-default");
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__glow {
+  opacity: 0;
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__icon {
+  filter: url("#haircutdone-workflow-icon-default");
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__badge-fill {
+  fill: var(--haircutdone-badge-default-background);
+}
+
+.haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__badge-outline {
+  stroke: var(--haircutdone-badge-default-border);
+}
+
+.haircutdone-workflow-edge path {
+  vector-effect: non-scaling-stroke;
+  shape-rendering: geometricPrecision;
+  stroke-opacity: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.haircutdone-workflow-edge:not(:has(path[stroke-dasharray])) path {
+  stroke: var(--haircutdone-connector-solid);
+  stroke-width: 1.35px;
+}
+
+.haircutdone-workflow-edge:has(path[stroke-dasharray]) path {
+  stroke: var(--haircutdone-connector-dashed);
+  stroke-width: 1.25px;
+}
+
+.haircutdone-workflow-motion-layer,
+.haircutdone-workflow-motion-path,
+.haircutdone-workflow-signal {
+  pointer-events: none;
+}
+
+.haircutdone-workflow-motion-path {
+  fill: none;
+  stroke: none;
+}
+
+.haircutdone-workflow-signal__outer-glow {
+  fill: var(--haircutdone-signal-halo);
+  opacity: 0.58;
+  filter: url("#haircutdone-workflow-signal-glow-outer");
+}
+
+.haircutdone-workflow-signal__near-glow {
+  fill: var(--haircutdone-signal-primary);
+  opacity: 0.95;
+  filter: url("#haircutdone-workflow-signal-glow-near");
+}
+
+.haircutdone-workflow-signal__body {
+  fill: var(--haircutdone-signal-electric);
+}
+
+.haircutdone-workflow-signal__core {
+  fill: var(--haircutdone-signal-core);
+}
+
+.haircutdone-workflow-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 767px) {
+  .haircutdone-workflow-root,
+  .haircutdone-workflow-board {
+    max-width: none;
+  }
+
+  .haircutdone-workflow-viewport {
+    width: 100%;
+    padding: 48px 54.857143px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    border-radius: 0;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    scroll-behavior: smooth;
+  }
+
+  .haircutdone-workflow-canvas {
+    width: 960px;
+    min-width: 960px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .haircutdone-workflow-node,
+  .haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible),
+  .haircutdone-workflow-node.haircutdone-workflow-is-releasing,
+  .haircutdone-workflow-node.haircutdone-workflow-is-pressed {
+    --haircutdone-node-state-duration: 0s;
+  }
+
+  .haircutdone-workflow-node .haircutdone-workflow-node__visual,
+  .haircutdone-workflow-node.haircutdone-workflow-is-featured .haircutdone-workflow-node__visual,
+  .haircutdone-workflow-node:is(.haircutdone-workflow-is-hovered, :focus-visible) .haircutdone-workflow-node__visual,
+  .haircutdone-workflow-node.haircutdone-workflow-is-pressed .haircutdone-workflow-node__visual {
+    transform: none;
+  }
+
+  .haircutdone-workflow-viewport {
+    scroll-behavior: auto;
+  }
+}
