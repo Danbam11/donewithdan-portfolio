@@ -70,6 +70,79 @@
     min-width: 0;
   }
 
+  .presentationStage {
+    min-height: 125vh;
+    min-width: 0;
+    perspective: 1000px;
+    perspective-origin: center top;
+  }
+
+  .presentationAnchor {
+    position: sticky;
+    top: clamp(16px, 8vh, 80px);
+    min-width: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .presentationAnchorSettled {
+    position: relative;
+    top: auto;
+  }
+
+  .browserShell {
+    overflow: hidden;
+    border: 1px solid #28342f;
+    border-radius: 22px;
+    background: #121816;
+    box-shadow:
+      inset 0 0 0 1px rgb(211 222 215 / 6%),
+      inset 0 1px 0 rgb(231 238 233 / 8%),
+      0 0 0 1px rgb(91 110 102 / 12%),
+      0 0 28px rgb(91 110 102 / 5%),
+      0 28px 70px rgb(3 10 7 / 38%);
+  }
+
+  .browserChrome {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 0 14px;
+    border-bottom: 1px solid #28342f;
+    background: #17201d;
+  }
+
+  .browserChrome span {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #64766e;
+  }
+
+  .browserChrome span:nth-child(2) {
+    background: #72847c;
+  }
+
+  .browserChrome span:nth-child(3) {
+    background: #81938a;
+  }
+
+  .browserAddress {
+    width: min(34%, 280px);
+    height: 8px;
+    margin-left: 8px;
+    border-radius: 999px;
+    background: #42554e;
+  }
+
+  .browserViewport {
+    min-width: 0;
+    padding: 12px;
+    background: #141a18;
+    box-shadow: inset 0 0 0 1px rgb(212 222 216 / 5%);
+  }
+
   @media (max-width: 767px) {
     .spike {
       padding-inline: 16px;
@@ -78,6 +151,24 @@
     .status {
       width: 100%;
       margin-left: 0;
+    }
+
+    .presentationStage {
+      min-height: auto;
+    }
+
+    .presentationAnchor {
+      position: static;
+      transform: none !important;
+      will-change: auto;
+    }
+
+    .browserShell {
+      border-radius: 14px;
+    }
+
+    .browserViewport {
+      padding: 8px;
     }
   }
 }

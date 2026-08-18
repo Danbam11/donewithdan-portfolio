@@ -24,7 +24,7 @@ function OffscreenTestSpace({ position }) {
 }
 
 export default {
-  title: 'Home/System workflow spike',
+  title: 'SYSTEM / WorkflowBoard Spike',
   component: SystemWorkflowSpike,
 };
 
@@ -33,5 +33,13 @@ export const LifecycleMount = () => (
     <OffscreenTestSpace position="before" />
     <SystemWorkflowSpike />
     <OffscreenTestSpace position="after" />
+  </>
+);
+
+export const PerspectiveEntrance = () => (
+  <>
+    <OffscreenTestSpace position="before — approach until the outer board settles" />
+    <SystemWorkflowSpike perspectiveEntrance />
+    <OffscreenTestSpace position="after — continue fully offscreen, then re-enter" />
   </>
 );
