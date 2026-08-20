@@ -1,0 +1,1 @@
+export { HaircutDone } from './haircutdone';
