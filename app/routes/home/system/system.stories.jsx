@@ -24,14 +24,22 @@ function OffscreenTestSpace({ position }) {
 }
 
 export default {
-  title: 'SYSTEM / WorkflowBoard Spike',
+  title: 'SYSTEM / WorkflowBoard',
   component: SystemWorkflowSpike,
 };
+
+export const ProductionDesktop = () => (
+  <>
+    <OffscreenTestSpace position="before — 170px desktop rail is reserved by SYSTEM" />
+    <SystemWorkflowSpike perspectiveEntrance />
+    <OffscreenTestSpace position="after — inspect the settled board, description, and CTA" />
+  </>
+);
 
 export const LifecycleMount = () => (
   <>
     <OffscreenTestSpace position="before" />
-    <SystemWorkflowSpike />
+    <SystemWorkflowSpike diagnostics />
     <OffscreenTestSpace position="after" />
   </>
 );
@@ -39,7 +47,7 @@ export const LifecycleMount = () => (
 export const PerspectiveEntrance = () => (
   <>
     <OffscreenTestSpace position="before — approach until the outer board settles" />
-    <SystemWorkflowSpike perspectiveEntrance />
+    <SystemWorkflowSpike perspectiveEntrance diagnostics />
     <OffscreenTestSpace position="after — continue fully offscreen, then re-enter" />
   </>
 );

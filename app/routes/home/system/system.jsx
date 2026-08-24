@@ -4,24 +4,23 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
 } from 'framer-motion';
+import { Button } from '~/components/button';
+import { Transition } from '~/components/transition';
 import { useHydrated } from '~/hooks/useHydrated';
 import { createHaircutDoneWorkflow } from './haircutdone/haircutdone-workflow';
 import './haircutdone/haircutdone-workflow.css';
 import styles from './system.module.css';
 
-const entranceSpring = {
-  stiffness: 110,
-  damping: 26,
-  mass: 0.8,
-};
+const PERSPECTIVE_START = Object.freeze({ rotateX: 18 });
+const PERSPECTIVE_SETTLE_VIEWPORTS = 0.9;
+const CONTENT_REVEAL_VIEWPORTS = 0.22;
 
-const entranceSettleProgress = 0.42;
-
-export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
+export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics = false }) {
   const presentationStageRef = useRef(null);
+  const browserLayoutProbeRef = useRef(null);
+  const browserShellRef = useRef(null);
   const hostRef = useRef(null);
   const controllerRef = useRef(null);
   const pendingInitializationRef = useRef(false);
@@ -29,29 +28,11 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
   const destroyOnResolveRef = useRef(false);
   const ambientRunningRef = useRef(false);
   const visibilityEligibleRef = useRef(false);
-  const entranceSettledRef = useRef(false);
+  const motionRangeActiveRef = useRef(false);
+  const motionRangeRef = useRef({ start: 0, settle: 1, content: 1 });
   const isHydrated = useHydrated();
   const reducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: presentationStageRef,
-    offset: ['start 90%', 'end 18%'],
-  });
-  const rotateX = useSpring(
-    useTransform(scrollYProgress, [0, 0.36, entranceSettleProgress, 1], [18, 3, 0, 0]),
-    entranceSpring
-  );
-  const scale = useSpring(
-    useTransform(scrollYProgress, [0, 0.36, entranceSettleProgress, 1], [0.9, 0.985, 1, 1]),
-    entranceSpring
-  );
-  const translateY = useSpring(
-    useTransform(scrollYProgress, [0, 0.36, entranceSettleProgress, 1], [88, 16, 0, 0]),
-    entranceSpring
-  );
-  const textY = useSpring(
-    useTransform(scrollYProgress, [0, 0.36, entranceSettleProgress, 1], [0, -62, -72, -128]),
-    entranceSpring
-  );
+  const { scrollY } = useScroll();
   const [instanceEpoch, setInstanceEpoch] = useState(0);
   const [controllerReady, setControllerReady] = useState(false);
   const [ambientRunning, setAmbientRunning] = useState(false);
@@ -59,7 +40,19 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
   const [hostWidth, setHostWidth] = useState(null);
   const [error, setError] = useState(null);
   const [compactLayout, setCompactLayout] = useState(false);
-  const [entranceSettled, setEntranceSettled] = useState(false);
+  const [motionRangeActive, setMotionRangeActive] = useState(false);
+  const [motionRange, setMotionRange] = useState({ start: 0, settle: 1, content: 1 });
+  const [motionGeometry, setMotionGeometry] = useState(null);
+  const [perspectiveSettled, setPerspectiveSettled] = useState(false);
+  const perspectiveEnd = motionRange.start + motionRange.settle;
+  const contentRevealEnd = perspectiveEnd + motionRange.content;
+  const rotateX = useTransform(scrollY, [motionRange.start, perspectiveEnd], [18, 0]);
+  const compositionY = useTransform(
+    scrollY,
+    [perspectiveEnd, contentRevealEnd],
+    [0, motionGeometry?.finalShiftY ?? 0]
+  );
+  const contentOpacity = useTransform(scrollY, [perspectiveEnd, contentRevealEnd], [0, 1]);
 
   const stopAmbient = useCallback(() => {
     const controller = controllerRef.current;
@@ -81,12 +74,75 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
     setAmbientRunning(true);
   }, [reducedMotion]);
 
-  const markEntranceSettled = useCallback(() => {
-    if (entranceSettledRef.current) return;
+  const beginMotionRange = useCallback(() => {
+    if (motionRangeActiveRef.current || typeof window === 'undefined') return;
 
-    entranceSettledRef.current = true;
-    setEntranceSettled(true);
-  }, []);
+    const browserLayoutRect = browserLayoutProbeRef.current?.getBoundingClientRect();
+    const browserRect = browserShellRef.current?.getBoundingClientRect();
+    if (!browserLayoutRect || !browserRect) return;
+
+    const viewportHeight = window.innerHeight;
+    // The invisible probe keeps threshold and runway geometry independent of visual projection.
+    const browserHeight = browserLayoutProbeRef.current.offsetHeight;
+    const desiredGuardTop = viewportHeight * 0.2;
+    const fitSafeTop = Math.max(16, viewportHeight - browserHeight - 16);
+    const guardTopPx = Math.min(desiredGuardTop, fitSafeTop);
+    const centeredTop = (viewportHeight - browserHeight) / 2;
+    const finalTopPx = Math.min(112, Math.max(16, centeredTop));
+    const finalShiftY = Math.min(0, finalTopPx - guardTopPx);
+
+    const nextRange = {
+      start: window.scrollY,
+      settle: viewportHeight * PERSPECTIVE_SETTLE_VIEWPORTS,
+      content: viewportHeight * CONTENT_REVEAL_VIEWPORTS,
+    };
+    const prePinTravel = Math.max(0, browserLayoutRect.top - guardTopPx);
+    const requiredStickyRunway = Math.max(0, nextRange.settle + nextRange.content - prePinTravel);
+    const nextGeometry = {
+      browserHeight,
+      guardTopPx,
+      finalTopPx,
+      finalShiftY,
+      requiredStickyRunway,
+    };
+
+    if (import.meta.env.DEV) {
+      console.debug('[SYSTEM WorkflowBoard scroll geometry]', {
+        viewportWidth: window.innerWidth,
+        viewportHeight,
+        browserLayoutRectTop: browserLayoutRect.top,
+        browserVisualRectTop: browserRect.top,
+        browserHeight,
+        motionStartScrollY: nextRange.start,
+        guardTopPx,
+        finalTopPx,
+        finalShiftY,
+        prePinTravel,
+        settleDistance: nextRange.settle,
+        contentRevealDistance: nextRange.content,
+        requiredStickyRunway,
+        perspectiveEnd: nextRange.start + nextRange.settle,
+        contentRevealEnd: nextRange.start + nextRange.settle + nextRange.content,
+      });
+    }
+
+    motionRangeActiveRef.current = true;
+    motionRangeRef.current = nextRange;
+    setMotionRange(nextRange);
+    setMotionGeometry(nextGeometry);
+    setMotionRangeActive(true);
+    setPerspectiveSettled(false);
+    startAmbient();
+  }, [startAmbient]);
+
+  const resetMotionRange = useCallback(() => {
+    if (!motionRangeActiveRef.current) return;
+
+    motionRangeActiveRef.current = false;
+    setMotionRangeActive(false);
+    setPerspectiveSettled(false);
+    stopAmbient();
+  }, [stopAmbient]);
 
   const destroyController = useCallback(() => {
     stopAmbient();
@@ -116,6 +172,12 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
         }
 
         controllerRef.current = controller;
+        if (!diagnostics) {
+          hostRef.current.style.maxWidth = 'none';
+          hostRef.current
+            .querySelector('.haircutdone-workflow-board')
+            ?.style.setProperty('max-width', 'none');
+        }
         ambientRunningRef.current = false;
         setControllerReady(true);
         setAmbientRunning(false);
@@ -135,7 +197,7 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
         destroyController();
       });
     };
-  }, [destroyController, instanceEpoch, isHydrated]);
+  }, [destroyController, diagnostics, instanceEpoch, isHydrated]);
 
   useEffect(() => {
     if (!hostRef.current || typeof ResizeObserver === 'undefined') return undefined;
@@ -149,8 +211,8 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
   }, []);
 
   useEffect(() => {
-    if (reducedMotion) stopAmbient();
-  }, [reducedMotion, stopAmbient]);
+    if (reducedMotion) resetMotionRange();
+  }, [reducedMotion, resetMotionRange]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
@@ -164,52 +226,62 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
   }, []);
 
   useEffect(() => {
-    if (!perspectiveEntrance) return;
+    if (compactLayout) resetMotionRange();
+  }, [compactLayout, resetMotionRange]);
 
-    if (reducedMotion || compactLayout || scrollYProgress.get() >= entranceSettleProgress) {
-      markEntranceSettled();
-    }
-  }, [compactLayout, markEntranceSettled, perspectiveEntrance, reducedMotion, scrollYProgress]);
+  useMotionValueEvent(scrollY, 'change', latest => {
+    if (!motionRangeActiveRef.current) return;
 
-  useMotionValueEvent(scrollYProgress, 'change', latest => {
-    if (
-      perspectiveEntrance &&
-      !reducedMotion &&
-      !compactLayout &&
-      latest >= entranceSettleProgress
-    ) {
-      markEntranceSettled();
-    }
+    const { start, settle } = motionRangeRef.current;
+    setPerspectiveSettled(latest >= start + settle);
   });
-
-  useEffect(() => {
-    if (perspectiveEntrance && entranceSettled && visibilityEligibleRef.current) {
-      startAmbient();
-    }
-  }, [entranceSettled, perspectiveEntrance, startAmbient]);
 
   useEffect(() => {
     const visibilityGateActive = perspectiveEntrance || visibilityGating;
 
-    if (!visibilityGateActive || !controllerReady || !hostRef.current) return undefined;
+    if (!visibilityGateActive || !controllerReady || !browserLayoutProbeRef.current) return undefined;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        if (perspectiveEntrance && !reducedMotion && !compactLayout) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.9) {
+            visibilityEligibleRef.current = true;
+            beginMotionRange();
+          } else if (
+            entry.intersectionRatio < 0.9 &&
+            window.scrollY < motionRangeRef.current.start
+          ) {
+            visibilityEligibleRef.current = false;
+            resetMotionRange();
+          }
+          return;
+        }
+
         if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
           visibilityEligibleRef.current = true;
 
-          if (!perspectiveEntrance || entranceSettledRef.current) startAmbient();
+          startAmbient();
         } else if (entry.intersectionRatio === 0) {
           visibilityEligibleRef.current = false;
           stopAmbient();
         }
       },
-      { threshold: [0, 0.15] }
+      { threshold: [0, 0.15, 0.9, 1] }
     );
 
-    observer.observe(hostRef.current);
+    observer.observe(browserLayoutProbeRef.current);
     return () => observer.disconnect();
-  }, [controllerReady, perspectiveEntrance, startAmbient, stopAmbient, visibilityGating]);
+  }, [
+    beginMotionRange,
+    compactLayout,
+    controllerReady,
+    perspectiveEntrance,
+    reducedMotion,
+    resetMotionRange,
+    startAmbient,
+    stopAmbient,
+    visibilityGating,
+  ]);
 
   const handleReinitialize = useCallback(() => {
     if (pendingInitializationRef.current) return;
@@ -225,12 +297,9 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
     </div>
   );
 
-  return (
-    <section className={styles.spike} aria-labelledby="system-spike-title">
-      <motion.div
-        className={styles.context}
-        style={useShowcaseMotion ? { y: textY } : undefined}
-      >
+  const diagnosticsContent = diagnostics ? (
+    <>
+      <div className={styles.context}>
         <p className={styles.eyebrow}>SYSTEM SPIKE</p>
         <h2 id="system-spike-title">
           {perspectiveEntrance ? 'WorkflowBoard perspective entrance' : 'WorkflowBoard lifecycle mount'}
@@ -240,13 +309,12 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
             ? 'SPIKE-ONLY scroll showcase. The board remains atomic while ambient work waits for its front-facing settlement.'
             : 'Isolated host for mount, containment, ambient controls, resize observation, and unmount cleanup. This is not the final SYSTEM section.'}
         </p>
-      </motion.div>
-
+      </div>
       <div className={styles.controls} aria-label="WorkflowBoard diagnostic controls">
         <button
           type="button"
           onClick={startAmbient}
-          disabled={!controllerReady || reducedMotion || (perspectiveEntrance && !entranceSettled)}
+          disabled={!controllerReady || reducedMotion || (perspectiveEntrance && !perspectiveSettled)}
         >
           Start ambient
         </button>
@@ -276,8 +344,8 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
               ? 'Initializing…'
               : reducedMotion
               ? 'Static reduced-motion mode'
-              : perspectiveEntrance && !entranceSettled
-                ? 'Entrance settling'
+              : perspectiveEntrance && !perspectiveSettled
+                ? 'Perspective settling'
               : ambientRunning
                   ? 'Ambient running'
                   : 'Ambient stopped'}
@@ -289,16 +357,22 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
           {hostWidth ? ` · host ${hostWidth}px` : ''}
         </output>
       </div>
+    </>
+  ) : null;
 
-      {perspectiveEntrance ? (
-        <div className={styles.presentationStage} ref={presentationStageRef}>
+  const boardPresentation = perspectiveEntrance ? (
+    <div className={styles.presentationStage} ref={presentationStageRef}>
+      <motion.div
+        className={styles.presentationAnchor}
+        style={useShowcaseMotion && motionRangeActive ? { y: compositionY } : undefined}
+      >
+        <div className={styles.browserLayoutProbe} ref={browserLayoutProbeRef} aria-hidden="true" />
+        <div className={styles.browserPerspectiveStage}>
           <motion.div
-            className={`${styles.presentationAnchor}${
-              entranceSettled ? ` ${styles.presentationAnchorSettled}` : ''
-            }`}
-            style={useShowcaseMotion ? { rotateX, scale, y: translateY } : undefined}
+            className={styles.browserPerspective}
+            style={useShowcaseMotion ? (motionRangeActive ? { rotateX } : PERSPECTIVE_START) : undefined}
           >
-            <div className={styles.browserShell}>
+            <div className={styles.browserShell} ref={browserShellRef}>
               <div className={styles.browserChrome} aria-hidden="true">
                 <span />
                 <span />
@@ -309,9 +383,66 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false }) {
             </div>
           </motion.div>
         </div>
-      ) : (
-        <div className={styles.viewport}>{workflowBoard}</div>
+        {!diagnostics && (
+          <motion.div
+            className={styles.belowBoard}
+            style={useShowcaseMotion ? { opacity: motionRangeActive ? contentOpacity : 0 } : undefined}
+          >
+            <p>
+              A connected GoHighLevel journey for recommendations, booking, reminders, recovery,
+              and follow-up.
+            </p>
+            <Button className={styles.cta} iconEnd="arrow-right" iconHoverShift>
+              View the full system
+            </Button>
+          </motion.div>
+        )}
+      </motion.div>
+    </div>
+  ) : (
+    <div className={styles.viewport}>{workflowBoard}</div>
+  );
+
+  return (
+    <section
+      className={`${styles.system}${diagnostics ? ` ${styles.diagnostic}` : ''}`}
+      aria-labelledby={diagnostics ? 'system-spike-title' : 'system-title'}
+      data-scroll-motion={useShowcaseMotion}
+      style={
+        motionGeometry
+          ? {
+              '--motionGuardTop': `${motionGeometry.guardTopPx}px`,
+              '--motionStickyRunway': `${motionGeometry.requiredStickyRunway}px`,
+            }
+          : undefined
+      }
+    >
+      {diagnosticsContent}
+      {!diagnostics && (
+        <>
+          <Transition in={isHydrated}>
+            {({ visible }) => (
+              <p className={styles.decorative} data-visible={visible} aria-hidden="true">
+                SYSTEM
+              </p>
+            )}
+          </Transition>
+          <div className={styles.intro}>
+            <Transition in={isHydrated}>
+              {({ visible }) => (
+                <p className={styles.eyebrow} data-visible={visible}>SYSTEM</p>
+              )}
+            </Transition>
+            <h2 id="system-title" className={styles.headline}>
+              <span className={styles.oneJourney}>One journey.</span>
+              <span className={styles.everyStep}>Every step,</span>
+              <span className={styles.done}>DONE.</span>
+            </h2>
+          </div>
+        </>
       )}
+
+      {boardPresentation}
     </section>
   );
 }
