@@ -63,6 +63,7 @@ export const Model = ({
   className,
   onLoad,
   alt,
+  enablePointerMotion = true,
   ...rest
 }) => {
   const [loaded, setLoaded] = useState(false);
@@ -293,14 +294,14 @@ export const Model = ({
       rotationX.set(position.y / 2);
     }, 100);
 
-    if (isInViewport && !reduceMotion) {
+    if (enablePointerMotion && isInViewport && !reduceMotion) {
       window.addEventListener('mousemove', onMouseMove);
     }
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
     };
-  }, [isInViewport, reduceMotion, rotationX, rotationY]);
+  }, [enablePointerMotion, isInViewport, reduceMotion, rotationX, rotationY]);
 
   // Handle window resize
   useEffect(() => {

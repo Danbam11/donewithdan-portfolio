@@ -1,4 +1,6 @@
 import bookingsIllustration from '~/assets/gaps-bookings.png';
+import { Transition } from '~/components/transition';
+import { useHydrated } from '~/hooks/useHydrated';
 import followupsIllustration from '~/assets/gaps-followups.png';
 import leadsIllustration from '~/assets/gaps-leads.png';
 import {
@@ -90,6 +92,23 @@ function useDesktopStacking(reducedMotion) {
   }, [reducedMotion]);
 
   return desktopStacking;
+}
+
+function useDesktopHeroAnimation() {
+  const [desktopHeroAnimation, setDesktopHeroAnimation] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const mediaQuery = window.matchMedia('(min-width: 1041px)');
+    const updateHeroAnimation = () => setDesktopHeroAnimation(mediaQuery.matches);
+
+    updateHeroAnimation();
+    mediaQuery.addEventListener('change', updateHeroAnimation);
+    return () => mediaQuery.removeEventListener('change', updateHeroAnimation);
+  }, []);
+
+  return desktopHeroAnimation;
 }
 
 function useStackProgress(startMarkerRef, stackStageRef, enabled) {
@@ -247,6 +266,7 @@ export function Gaps({ animateEntrance = true }) {
   const startedRef = useRef(false);
   const mountedRef = useRef(true);
   const reducedMotion = useReducedMotion();
+  const isHydrated = useHydrated();
   const giantControls = useAnimationControls();
   const kickerControls = useAnimationControls();
   const foregroundControls = useAnimationControls();
@@ -254,7 +274,9 @@ export function Gaps({ animateEntrance = true }) {
   const [doneRevealed, setDoneRevealed] = useState(false);
   const [coverVisible, setCoverVisible] = useState(false);
   const [entranceComplete, setEntranceComplete] = useState(false);
-  const shouldAnimate = animateEntrance && !reducedMotion;
+  const desktopHeroAnimation = useDesktopHeroAnimation();
+  const shouldAnimate = animateEntrance && desktopHeroAnimation && !reducedMotion;
+  const shouldAnimateResponsiveText = animateEntrance && !desktopHeroAnimation;
   const stackingEnabled = useDesktopStacking(reducedMotion);
   const triggerReached = useInView(headerRef, {
     amount: 0,
@@ -376,11 +398,18 @@ export function Gaps({ animateEntrance = true }) {
 
   return (
     <section className={styles.section} aria-labelledby="gaps-title">
-      <motion.header
-        className={`${styles.header}${stackingEnabled ? ` ${styles.headerSticky}` : ''}`}
-        ref={headerRef}
-        style={stackingEnabled ? { y: heroReleaseY } : undefined}
-      >
+      <div className={styles.heroShell}>
+        <motion.header
+          className={`${styles.header}${stackingEnabled ? ` ${styles.headerSticky}` : ''}`}
+          ref={headerRef}
+          style={
+            stackingEnabled
+              ? { y: heroReleaseY }
+              : !desktopHeroAnimation
+                ? { transform: 'scale(var(--mobileScale, 1))' }
+                : undefined
+          }
+        >
         {shouldAnimate ? (
           <motion.div
             className={styles.decorativeWord}
@@ -395,8 +424,24 @@ export function Gaps({ animateEntrance = true }) {
             <span className={styles.wordCovered}>GAPS</span>
             <span className={styles.wordExposed}>GAPS</span>
           </motion.div>
+        ) : shouldAnimateResponsiveText ? (
+          <Transition in={isHydrated}>
+            {({ visible }) => (
+              <div
+                className={`${styles.decorativeWord} ${styles.responsiveDecorativeWord}`}
+                data-visible={visible}
+                aria-hidden="true"
+              >
+                <span className={styles.wordCovered}>GAPS</span>
+                <span className={styles.wordExposed}>GAPS</span>
+              </div>
+            )}
+          </Transition>
         ) : (
-          <div className={styles.decorativeWord} aria-hidden="true">
+          <div
+            className={styles.decorativeWord}
+            aria-hidden="true"
+          >
             <span className={styles.wordCovered}>GAPS</span>
             <span className={styles.wordExposed}>GAPS</span>
           </div>
@@ -434,19 +479,40 @@ export function Gaps({ animateEntrance = true }) {
                 </span>
               </h2>
             </>
+          ) : shouldAnimateResponsiveText ? (
+            <Transition in={isHydrated}>
+              {({ visible }) => (
+                <>
+                  <p className={`${styles.kicker} ${styles.responsiveKicker}`} data-visible={visible}>
+                    GAPS
+                  </p>
+                  <h2
+                    className={`${styles.heading} ${styles.responsiveHeading}`}
+                    data-visible={visible}
+                    id="gaps-title"
+                  >
+                    <span className={styles.heroLine}>What gets left</span>
+                    <span className={styles.heroLine}>
+                      <span className={styles.unText}>un</span><span className={styles.doneText}>DONE.</span>
+                    </span>
+                  </h2>
+                </>
+              )}
+            </Transition>
           ) : (
             <>
               <p className={styles.kicker}>GAPS</p>
               <h2 className={styles.heading} id="gaps-title">
                 <span className={styles.heroLine}>What gets left</span>
                 <span className={styles.heroLine}>
-                  un<span className={styles.doneText}>DONE.</span>
+                  <span className={styles.unText}>un</span><span className={styles.doneText}>DONE.</span>
                 </span>
               </h2>
             </>
           )}
         </div>
-      </motion.header>
+        </motion.header>
+      </div>
 
       <div
         className={`${styles.problems}${stackingEnabled ? ` ${styles.stackingActive}` : ` ${styles.reducedMotion}`}`}

@@ -44,6 +44,10 @@
     z-index: 4;
   }
 
+  .heroShell {
+    display: contents;
+  }
+
   .decorativeWord {
     position: absolute;
     top: 0;
@@ -63,14 +67,14 @@
   }
 
   .wordCovered {
-    color: var(--textTitle);
+    color: #f7ffff;
     opacity: 0.07;
   }
 
   .wordExposed {
     position: absolute;
     inset: 0;
-    color: var(--textTitle);
+    color: #f7ffff;
     opacity: 0.19;
   }
 
@@ -149,6 +153,52 @@
     background: var(--primary);
     transform-origin: left center;
     will-change: transform;
+  }
+
+  @media (max-width: 1040px) {
+    .responsiveDecorativeWord {
+      opacity: 0;
+      transition: opacity var(--durationXL) var(--bezierFastoutSlowin);
+
+      &[data-visible='true'] {
+        opacity: 1;
+      }
+    }
+
+    .responsiveKicker {
+      opacity: 0;
+      transition-property: transform, opacity;
+      transition-timing-function: var(--bezierFastoutSlowin);
+      transition-duration: var(--durationXL);
+      transition-delay: var(--durationS);
+      transform: translate3d(0, var(--spaceM), 0);
+
+      &[data-visible='true'] {
+        transform: none;
+        opacity: 1;
+      }
+    }
+
+    .responsiveHeading {
+      opacity: 0;
+      transition-property: transform, opacity;
+      transition-timing-function: var(--bezierFastoutSlowin);
+      transition-duration: var(--durationXL);
+      transition-delay: var(--durationM);
+      transform: translate3d(0, var(--spaceL), 0);
+
+      &[data-visible='true'] {
+        transform: none;
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .responsiveDecorativeWord {
+        opacity: 1;
+        transition: none;
+      }
+    }
   }
 
   .problems {
@@ -353,7 +403,8 @@
 
   @media (--mediaTablet) {
     .section {
-      padding-inline: var(--spaceOuter);
+      padding-top: 0;
+      padding-inline: 0;
     }
 
     .problem {
@@ -392,34 +443,265 @@
     .composition {
       width: 100%;
     }
+
+    .problems {
+      box-sizing: border-box;
+      margin-top: 0;
+      padding-inline: var(--spaceOuter);
+    }
+  }
+
+  @media (min-width: 1041px) {
+    .decorativeWord {
+      left: -17.21875px;
+      font-size: 314.96px;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      position: absolute;
+      top: 140px;
+      left: 100px;
+      display: block;
+      width: 760px;
+      padding-bottom: 0;
+    }
+
+    .kicker {
+      font-size: 19px;
+      letter-spacing: 2.24px;
+    }
+
+    .heading {
+      position: absolute;
+      top: 19px;
+      left: 0;
+      width: 760px;
+      max-width: none;
+      height: 200px;
+      font-size: min(6.5vw, 93.6px);
+      letter-spacing: 0;
+    }
+
+    .heroLine {
+      white-space: nowrap;
+    }
+
+    .heroLine + .heroLine {
+      position: absolute;
+      top: 88.03125px;
+      left: 0;
+      margin-top: 0;
+    }
+
+    .doneText {
+      margin-left: -10.078125px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1040px) {
+    .heroShell {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 586.217391px;
+      margin: 0;
+    }
+
+    .header {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      min-height: 586.217391px;
+      height: 586.217391px;
+      padding: 0;
+      transform: none !important;
+    }
+
+    .decorativeWord {
+      top: 56.405797px;
+      left: 48.35px;
+      transform: translateY(29px);
+      font-family: var(--fontStack);
+      font-size: 255px;
+      font-weight: 700;
+      font-style: normal;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .wordCovered {
+      color: #f7ffff;
+      opacity: 0.07;
+    }
+
+    .wordExposed {
+      display: none;
+    }
+
+    .intro {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+    }
+
+    .kicker {
+      position: absolute;
+      top: 226px;
+      left: 129px;
+      box-sizing: border-box;
+      display: block;
+      width: 70px;
+      height: 25px;
+      min-width: 0;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--fontStack);
+      font-size: 24.2px;
+      font-weight: 500;
+      font-style: normal;
+      letter-spacing: 0;
+      line-height: 1;
+      white-space: nowrap;
+      transform: none;
+    }
+
+    .heading {
+      position: absolute;
+      top: 251px;
+      left: 129px;
+      box-sizing: border-box;
+      width: 580px;
+      max-width: none;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      font-family: var(--fontStack);
+      font-size: 80.67px;
+      font-weight: 500;
+      font-style: normal;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .heroLine {
+      box-sizing: border-box;
+      display: block;
+      width: 580px;
+      height: 81px;
+      min-width: 0;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      white-space: nowrap;
+      transform: none;
+    }
+
+    .heroLine + .heroLine {
+      width: 373px;
+      margin-top: 0;
+    }
+
+    .unText,
+    .doneText {
+      position: static;
+      display: inline-block;
+      height: 81px;
+      line-height: 1;
+      vertical-align: top;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .heroShell {
+      --mobileScale: min(1, calc(100vw / 414px));
+
+      position: relative;
+      display: block;
+      width: 100vw;
+      height: calc(291px * var(--mobileScale));
+      margin-left: calc(var(--spaceOuter) * -1);
+    }
+
+    .header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 414px;
+      min-height: 291px;
+      height: 291px;
+      padding: 0;
+      transform: scale(var(--mobileScale)) !important;
+      transform-origin: top left;
+    }
+
+    .decorativeWord {
+      top: 28px;
+      left: 24px;
+      font-size: 128px;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1;
+      transform: none;
+    }
+
+    .wordCovered {
+      color: #f7ffff;
+      opacity: 0.07;
+    }
+
+    .wordExposed {
+      display: none;
+    }
+
+    .intro {
+      position: absolute;
+      top: 104px;
+      left: 63px;
+      width: auto;
+      padding: 0;
+      gap: 0;
+    }
+
+    .kicker {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .heading {
+      font-size: 40px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .heroLine {
+      white-space: nowrap;
+    }
+
+    .heroLine + .heroLine {
+      margin-top: 0;
+    }
+
+    .doneText {
+      position: static;
+    }
   }
 
   @media (--mediaMobile) {
     .section {
-      padding: 112px var(--spaceOuter) 128px;
+      padding: 0 0 128px;
     }
 
-    .header {
-      display: block;
-      min-height: 0;
-      padding-top: clamp(88px, 24vw, 144px);
-    }
-
-    .decorativeWord {
-      left: -0.04em;
-      font-size: clamp(7rem, 28vw, 11rem);
-    }
-
-    .intro {
-      padding: 0;
-    }
-
-    .heading {
-      font-size: clamp(3rem, 12vw, 4.5rem);
-    }
-
-    .problems {
-      margin-top: 104px;
+    .heroShell {
+      margin-left: 0;
     }
 
     .problem,
