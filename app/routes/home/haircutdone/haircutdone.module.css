@@ -65,15 +65,15 @@
   }
 
   .wordCovered {
-    color: var(--textTitle);
+    color: #f7ffff;
     opacity: 0.07;
   }
 
   .wordExposed {
     position: absolute;
     inset: 0;
-    color: var(--textTitle);
-    opacity: 0.19;
+    color: #f7ffff;
+    opacity: 0;
   }
 
   .intro {
@@ -178,17 +178,28 @@
     }
 
     .decorativeWord {
-      top: -0.52em;
-      left: -0.1em;
+      top: -0.53em;
+      left: -0.2744em;
+      font-size: 244.96px;
+      letter-spacing: 0;
     }
 
     .intro {
-      padding-left: clamp(24px, 3.5vw, 56px);
+      top: -3px;
+      padding-left: 29px;
+    }
+
+    .eyebrow {
+      position: relative;
+      top: 1px;
+      margin-bottom: 1px;
+      letter-spacing: 0;
     }
 
     .title.title[data-level='3'] {
       max-width: none;
       font-size: clamp(66px, 6.64vw, 70px);
+      margin-bottom: 40px;
     }
 
     .heroLine {
@@ -207,6 +218,7 @@
     .heroLine:last-child {
       display: block;
       margin-left: 0;
+      margin-top: 1px;
     }
   }
 
