@@ -217,7 +217,9 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
 
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    // Tablet and mobile are intentionally static compositions in Phase 1.
+    // Desktop remains the only breakpoint that owns the approved scroll choreography.
+    const mediaQuery = window.matchMedia('(max-width: 1040px)');
     const updateLayout = () => setCompactLayout(mediaQuery.matches);
 
     updateLayout();
@@ -229,6 +231,20 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
     if (compactLayout) resetMotionRange();
   }, [compactLayout, resetMotionRange]);
 
+  useEffect(() => {
+    if (!controllerReady || !hostRef.current) return;
+
+    hostRef.current.querySelectorAll('.haircutdone-workflow-node').forEach(node => {
+      if (compactLayout) {
+        node.setAttribute('tabindex', '-1');
+        node.setAttribute('aria-disabled', 'true');
+      } else {
+        node.setAttribute('tabindex', '0');
+        node.removeAttribute('aria-disabled');
+      }
+    });
+  }, [compactLayout, controllerReady]);
+
   useMotionValueEvent(scrollY, 'change', latest => {
     if (!motionRangeActiveRef.current) return;
 
@@ -239,7 +255,9 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
   useEffect(() => {
     const visibilityGateActive = perspectiveEntrance || visibilityGating;
 
-    if (!visibilityGateActive || !controllerReady || !browserLayoutProbeRef.current) return undefined;
+    const observedElement = compactLayout ? browserShellRef.current : browserLayoutProbeRef.current;
+
+    if (!visibilityGateActive || !controllerReady || !observedElement) return undefined;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -257,7 +275,9 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
           return;
         }
 
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
+        const visibilityThreshold = compactLayout ? 0.3 : 0.15;
+
+        if (entry.isIntersecting && entry.intersectionRatio >= visibilityThreshold) {
           visibilityEligibleRef.current = true;
 
           startAmbient();
@@ -266,10 +286,10 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
           stopAmbient();
         }
       },
-      { threshold: [0, 0.15, 0.9, 1] }
+      { threshold: compactLayout ? [0, 0.3, 1] : [0, 0.15, 0.9, 1] }
     );
 
-    observer.observe(browserLayoutProbeRef.current);
+    observer.observe(observedElement);
     return () => observer.disconnect();
   }, [
     beginMotionRange,

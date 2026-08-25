@@ -302,31 +302,200 @@
     max-width: none;
   }
 
-  @media (max-width: 1040px) {
+  @media (min-width: 768px) and (max-width: 1040px) {
     .system {
-      display: grid;
-      gap: 32px;
+      --tabletBrowserWidth: min(738px, calc(100% - 96px));
+      --tabletBrowserHeight: min(650px, calc(88.075949vw - 84.025316px));
+      --tabletInset: max(48px, calc((100% - 738px) / 2));
+
       width: 100%;
+      height: calc(572px + var(--tabletBrowserHeight));
       min-height: 0;
       margin: 0;
-      padding: 56px 24px 72px;
-      overflow: hidden;
+      overflow: clip;
     }
 
-    .decorative, .intro, .presentationStage, .belowBoard { position: static; }
-    .decorative { font-size: clamp(96px, 20vw, 180px); }
-    .intro { min-height: 210px; }
-    .eyebrow { top: 0; left: 0; }
-    .oneJourney { top: 42px; left: 0; font-size: clamp(42px, 7vw, 52px); }
-    .everyStep, .done { top: 102px; font-size: clamp(54px, 9vw, 78px); }
-    .everyStep { left: 0; }
-    .done { left: min(58vw, 510px); }
-    .presentationStage { height: auto; }
-    .presentationAnchor { position: static; height: auto; transform: none !important; will-change: auto; }
-    .browserPerspectiveStage { perspective: none; }
+    .system[data-scroll-motion='false'] { height: calc(572px + var(--tabletBrowserHeight)); }
+
+    .decorative,
+    .intro,
+    .presentationStage,
+    .belowBoard {
+      position: absolute;
+    }
+
+    .decorative {
+      top: 71px;
+      left: var(--tabletInset);
+      font-size: 179.5px;
+    }
+
+    .intro { inset: 0; min-height: 0; }
+    .eyebrow { top: 153px; left: calc(var(--tabletInset) + 62px); font-size: 16px; letter-spacing: 1.6px; }
+    .oneJourney { top: 175px; left: calc(var(--tabletInset) + 217px); font-size: 48px; }
+    .everyStep, .done { top: 220px; font-size: 64px; }
+    .everyStep { left: calc(var(--tabletInset) + 74px); }
+    .done { left: calc(var(--tabletInset) + 449px); }
+
+    .presentationStage {
+      top: 300px;
+      right: auto;
+      left: var(--tabletInset);
+      width: var(--tabletBrowserWidth);
+      height: var(--tabletBrowserHeight);
+    }
+
+    .system[data-scroll-motion='false'] .presentationStage { height: var(--tabletBrowserHeight); }
+
+    .presentationAnchor {
+      position: relative;
+      top: auto;
+      height: 100%;
+      transform: none !important;
+      will-change: auto;
+    }
+
+    .system[data-scroll-motion='false'] .presentationAnchor { height: 100%; }
+
+    .browserPerspectiveStage { height: 100%; perspective: none; }
     .browserLayoutProbe { display: none; }
-    .browserPerspective { transform: none !important; will-change: auto; }
-    .belowBoard { width: min(100%, 665px); margin-top: 32px; opacity: 1; pointer-events: auto; }
+    .browserPerspective { height: 100%; transform: none !important; will-change: auto; }
+
+    .system:not(.diagnostic) .browserShell {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      aspect-ratio: auto;
+    }
+
+    .system:not(.diagnostic) .browserChrome { flex-basis: 36px; }
+    .system:not(.diagnostic) .browserViewport { padding: 16px; }
+    .system:not(.diagnostic) .browserViewport .sizingLayer { width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; }
+    .system:not(.diagnostic) .browserViewport .host { width: 100%; height: 100%; min-height: 0; }
+    .system:not(.diagnostic) :global(.haircutdone-workflow-root),
+    .system:not(.diagnostic) :global(.haircutdone-workflow-board) { height: 100%; min-height: 0; }
+    .system:not(.diagnostic) :global(.haircutdone-workflow-viewport) {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      padding: 48px 54.857143px;
+      overflow-x: auto !important;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y;
+    }
+    .system:not(.diagnostic) :global(.haircutdone-workflow-canvas) { width: 936px; min-width: 936px; }
+    .system:not(.diagnostic) :global(.haircutdone-workflow-node),
+    .system:not(.diagnostic) :global(.haircutdone-workflow-node__hit) {
+      cursor: default !important;
+      pointer-events: none;
+    }
+
+    .belowBoard {
+      top: calc(var(--tabletBrowserHeight) + 37px);
+      left: 0;
+      width: 577px;
+      margin: 0;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .system[data-scroll-motion='false'] .belowBoard {
+      position: absolute;
+      top: calc(var(--tabletBrowserHeight) + 37px);
+      left: 0;
+      margin: 0;
+    }
+
+    .belowBoard p { font-size: 20px; }
+    .cta { width: 268.2px; margin-top: 36px; }
+  }
+
+  @media (max-width: 767px) {
+    .system {
+      width: 100%;
+      height: 265.700483vw;
+      min-height: 0;
+      margin: 0;
+      overflow: clip;
+    }
+
+    .system[data-scroll-motion='false'] { height: 265.700483vw; }
+
+    .decorative,
+    .intro,
+    .presentationStage,
+    .belowBoard {
+      position: absolute;
+    }
+
+    .decorative { top: 8.695652vw; left: 5.797101vw; font-size: 21.497585vw; }
+    .intro { inset: 0; min-height: 0; }
+    .eyebrow { top: 17.391304vw; left: 12.077295vw; font-size: 2.173913vw; letter-spacing: 0.217391vw; }
+    .oneJourney { top: 19.565217vw; left: 12.077295vw; font-size: 7.246377vw; }
+    .everyStep, .done { font-size: 7.246377vw; }
+    .everyStep { top: 26.086957vw; left: 35.024155vw; }
+    .done { top: 32.850242vw; left: 66.183575vw; }
+
+    .presentationStage {
+      top: 47.101449vw;
+      right: auto;
+      left: 5.797101vw;
+      width: 88.405797vw;
+      height: 157.190821vw;
+    }
+
+    .system[data-scroll-motion='false'] .presentationStage { height: 157.190821vw; }
+
+    .presentationAnchor {
+      position: relative;
+      top: auto;
+      height: 100%;
+      transform: none !important;
+      will-change: auto;
+    }
+
+    .system[data-scroll-motion='false'] .presentationAnchor { height: 100%; }
+
+    .browserPerspectiveStage { height: 100%; perspective: none; }
+    .browserLayoutProbe { display: none; }
+    .browserPerspective { height: 100%; transform: none !important; will-change: auto; }
+    .system:not(.diagnostic) .browserShell { width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; }
+    .system:not(.diagnostic) .browserChrome { flex-basis: 7.729469vw; }
+    .system:not(.diagnostic) .browserViewport { padding: 2.898551vw; }
+    .system:not(.diagnostic) .browserViewport .sizingLayer { width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; }
+    .system:not(.diagnostic) .browserViewport .host { width: 100%; height: 100%; min-height: 0; }
+    .system:not(.diagnostic) :global(.haircutdone-workflow-root),
+    .system:not(.diagnostic) :global(.haircutdone-workflow-board) { height: 100%; min-height: 0; }
+    .system:not(.diagnostic) :global(.haircutdone-workflow-node),
+    .system:not(.diagnostic) :global(.haircutdone-workflow-node__hit) {
+      cursor: default !important;
+      pointer-events: none;
+    }
+
+    .belowBoard {
+      top: 165.458937vw;
+      left: 1.932367vw;
+      width: 84.541063vw;
+      margin: 0;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .system[data-scroll-motion='false'] .belowBoard {
+      position: absolute;
+      top: 165.458937vw;
+      left: 1.932367vw;
+      margin: 0;
+    }
+
+    .belowBoard p { min-height: 23.188406vw; font-size: 4.347826vw; }
+    .cta { width: 64.7343vw; height: 13.52657vw; margin-top: 0; }
+    .cta :global(span) { font-size: 4.347826vw; }
+  }
+
+  @media (max-width: 1040px) {
     .diagnostic { padding-inline: 16px; }
   }
 }
