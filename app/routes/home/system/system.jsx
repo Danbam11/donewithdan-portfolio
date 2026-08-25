@@ -7,7 +7,6 @@ import {
   useTransform,
 } from 'framer-motion';
 import { Button } from '~/components/button';
-import { Transition } from '~/components/transition';
 import { useHydrated } from '~/hooks/useHydrated';
 import { createHaircutDoneWorkflow } from './haircutdone/haircutdone-workflow';
 import './haircutdone/haircutdone-workflow.css';
@@ -30,6 +29,10 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
   const visibilityEligibleRef = useRef(false);
   const motionRangeActiveRef = useRef(false);
   const motionRangeRef = useRef({ start: 0, settle: 1, content: 1 });
+  const identityRef = useRef(null);
+  const belowBoardRef = useRef(null);
+  const identityEnteredRef = useRef(false);
+  const belowBoardEnteredRef = useRef(false);
   const isHydrated = useHydrated();
   const reducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
@@ -44,6 +47,8 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
   const [motionRange, setMotionRange] = useState({ start: 0, settle: 1, content: 1 });
   const [motionGeometry, setMotionGeometry] = useState(null);
   const [perspectiveSettled, setPerspectiveSettled] = useState(false);
+  const [identityEntered, setIdentityEntered] = useState(false);
+  const [belowBoardEntered, setBelowBoardEntered] = useState(false);
   const perspectiveEnd = motionRange.start + motionRange.settle;
   const contentRevealEnd = perspectiveEnd + motionRange.content;
   const rotateX = useTransform(scrollY, [motionRange.start, perspectiveEnd], [18, 0]);
@@ -232,6 +237,59 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
   }, [compactLayout, resetMotionRange]);
 
   useEffect(() => {
+    if (
+      diagnostics ||
+      !isHydrated ||
+      reducedMotion ||
+      identityEnteredRef.current ||
+      !identityRef.current
+    ) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.25) return;
+
+        identityEnteredRef.current = true;
+        setIdentityEntered(true);
+        observer.disconnect();
+      },
+      { threshold: 0.25, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    observer.observe(identityRef.current);
+    return () => observer.disconnect();
+  }, [diagnostics, isHydrated, reducedMotion]);
+
+  useEffect(() => {
+    if (
+      diagnostics ||
+      !isHydrated ||
+      !compactLayout ||
+      reducedMotion ||
+      belowBoardEnteredRef.current ||
+      !belowBoardRef.current
+    ) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.2) return;
+
+        belowBoardEnteredRef.current = true;
+        setBelowBoardEntered(true);
+        observer.disconnect();
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    observer.observe(belowBoardRef.current);
+    return () => observer.disconnect();
+  }, [compactLayout, diagnostics, isHydrated, reducedMotion]);
+
+  useEffect(() => {
     if (!controllerReady || !hostRef.current) return;
 
     hostRef.current.querySelectorAll('.haircutdone-workflow-node').forEach(node => {
@@ -311,6 +369,8 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
   }, [destroyController]);
 
   const useShowcaseMotion = perspectiveEntrance && !reducedMotion && !compactLayout;
+  const identityVisible = reducedMotion || identityEntered;
+  const compactBelowBoardVisible = reducedMotion || belowBoardEntered;
   const workflowBoard = (
     <div className={styles.sizingLayer}>
       <div className={styles.host} ref={hostRef} />
@@ -406,6 +466,8 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
         {!diagnostics && (
           <motion.div
             className={styles.belowBoard}
+            data-visible={compactLayout && compactBelowBoardVisible}
+            ref={belowBoardRef}
             style={useShowcaseMotion ? { opacity: motionRangeActive ? contentOpacity : 0 } : undefined}
           >
             <p>
@@ -440,20 +502,17 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
       {diagnosticsContent}
       {!diagnostics && (
         <>
-          <Transition in={isHydrated}>
-            {({ visible }) => (
-              <p className={styles.decorative} data-visible={visible} aria-hidden="true">
-                SYSTEM
-              </p>
-            )}
-          </Transition>
+          <p
+            ref={identityRef}
+            className={styles.decorative}
+            data-visible={identityVisible}
+            aria-hidden="true"
+          >
+            SYSTEM
+          </p>
           <div className={styles.intro}>
-            <Transition in={isHydrated}>
-              {({ visible }) => (
-                <p className={styles.eyebrow} data-visible={visible}>SYSTEM</p>
-              )}
-            </Transition>
-            <h2 id="system-title" className={styles.headline}>
+            <p className={styles.eyebrow} data-visible={identityVisible}>SYSTEM</p>
+            <h2 id="system-title" className={styles.headline} data-visible={identityVisible}>
               <span className={styles.oneJourney}>One journey.</span>
               <span className={styles.everyStep}>Every step,</span>
               <span className={styles.done}>DONE.</span>
