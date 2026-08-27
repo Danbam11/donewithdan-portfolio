@@ -1,0 +1,12 @@
+@layer layout {
+  .review {
+    width: 100%;
+    min-height: 100dvh;
+    overflow-x: clip;
+    background: #000;
+  }
+
+  .review :global([data-hero-runtime-state]) {
+    display: none;
+  }
+}

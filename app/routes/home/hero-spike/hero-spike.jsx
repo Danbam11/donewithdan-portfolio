@@ -156,6 +156,7 @@ function TwistedBlobCanvas({
   heroRef,
   reduceMotion,
   forceWebglFailure,
+  fullView,
   onStateChange,
   rotationStrength,
   wireframePreview,
@@ -244,11 +245,22 @@ function TwistedBlobCanvas({
     };
 
     const resize = () => {
-      if (!renderer || !hero) return;
+      if (!hero) return;
 
       const width = hero.clientWidth;
       const height = hero.clientHeight;
       if (!width || !height) return;
+      const referenceScale = fullView ? Math.max(width / 1440, height / 1000) : 1;
+      const referenceOffsetX = fullView ? (width - 1440 * referenceScale) / 2 : 0;
+      const referenceOffsetY = fullView ? (height - 1000 * referenceScale) / 2 : 0;
+
+      if (fullView) {
+        hero.style.setProperty('--hero-reference-scale', referenceScale);
+        hero.style.setProperty('--hero-reference-offset-x', `${referenceOffsetX}px`);
+        hero.style.setProperty('--hero-reference-offset-y', `${referenceOffsetY}px`);
+      }
+
+      if (!renderer) return;
 
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(width, height, false);
@@ -260,8 +272,18 @@ function TwistedBlobCanvas({
       const worldWidth = worldHeight * camera.aspect;
       const footprintCenterX = footprint.left + footprint.width / 2;
       const footprintCenterY = footprint.top + footprint.height / 2;
-      const normalizedX = footprintCenterX / 1440;
-      const normalizedY = footprintCenterY / 1000;
+      const normalizedX = fullView
+        ? (referenceOffsetX + footprintCenterX * referenceScale) / width
+        : footprintCenterX / 1440;
+      const normalizedY = fullView
+        ? (referenceOffsetY + footprintCenterY * referenceScale) / height
+        : footprintCenterY / 1000;
+
+      if (fullView) {
+        mesh.scale.setScalar(meshConfig.scale * (referenceScale / (height / 1000)));
+      } else {
+        mesh.scale.setScalar(meshConfig.scale);
+      }
 
       basePosition = {
         x: (normalizedX - 0.5) * worldWidth,
@@ -309,6 +331,9 @@ function TwistedBlobCanvas({
 
     let observer;
     const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+    resize();
+    window.addEventListener('resize', resize);
 
     try {
       if (forceWebglFailure) throw new Error('Forced Storybook WebGL failure');
@@ -366,7 +391,6 @@ function TwistedBlobCanvas({
         observer.observe(hero);
       }
 
-      window.addEventListener('resize', resize);
       document.addEventListener('visibilitychange', handleVisibilityChange);
       canvas.addEventListener('webglcontextlost', handleContextLost);
 
@@ -393,6 +417,9 @@ function TwistedBlobCanvas({
       hero?.removeEventListener('pointerleave', returnToRest);
       hero?.removeEventListener('pointercancel', returnToRest);
       window.removeEventListener('blur', returnToRest);
+      hero?.style.removeProperty('--hero-reference-scale');
+      hero?.style.removeProperty('--hero-reference-offset-x');
+      hero?.style.removeProperty('--hero-reference-offset-y');
       rotationOffsetX.stop();
       rotationOffsetY.stop();
       rotationOffsetX.jump(0);
@@ -418,6 +445,7 @@ function TwistedBlobCanvas({
     baseRotationY,
     baseRotationZ,
     forceWebglFailure,
+    fullView,
     heroRef,
     onStateChange,
     reduceMotion,
@@ -439,6 +467,7 @@ export function HeroRuntimeSpike({
   diagnostics = false,
   exactDesktop = false,
   forceWebglFailure = false,
+  fullView = false,
   initialEntrance = true,
   pointerRotationStrength: rotationStrength = pointerRotationStrength,
   reducedMotion,
@@ -453,12 +482,15 @@ export function HeroRuntimeSpike({
     reduceMotion,
   });
   const [runtimeState, setRuntimeState] = useState('initializing');
+  const HeroStageTag = fullView ? 'div' : 'section';
 
-  return (
-    <section
-      aria-labelledby="hero-spike-title"
+  const heroStage = (
+    <HeroStageTag
+      aria-labelledby={fullView ? undefined : 'hero-spike-title'}
       className={styles.hero}
       data-exact-desktop={exactDesktop}
+      data-full-view={fullView}
+      data-hero-stage={fullView || undefined}
       data-reduce-motion={reduceMotion}
       ref={heroRef}
     >
@@ -467,6 +499,7 @@ export function HeroRuntimeSpike({
         baseRotationY={baseRotationY}
         baseRotationZ={baseRotationZ}
         forceWebglFailure={forceWebglFailure}
+        fullView={fullView}
         heroRef={heroRef}
         onStateChange={setRuntimeState}
         reduceMotion={reduceMotion}
@@ -523,7 +556,22 @@ export function HeroRuntimeSpike({
       {diagnostics && (
         <output className={styles.runtimeStatus}>BLOB RUNTIME · {runtimeState}</output>
       )}
-    </section>
+    </HeroStageTag>
+  );
+
+  if (!fullView) return heroStage;
+
+  return (
+    <>
+      <section
+        aria-labelledby="hero-spike-title"
+        className={styles.heroSection}
+        data-hero-section
+      >
+        {heroStage}
+      </section>
+      <div aria-hidden className={styles.toolstripAnchor} data-toolstrip-anchor />
+    </>
   );
 }
 

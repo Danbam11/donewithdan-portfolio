@@ -183,10 +183,10 @@ export const Desktop1440StandbyRuntime = args => (
 export const Desktop1440FitPreview = args => <FitPreview {...args} />;
 
 export const HeroFinalFullView = args => (
-  <FitPreview
+  <HeroRuntimeSpike
     {...args}
     autoRotate
-    fitMode="cover"
+    fullView
     initialEntrance
     wireframePreview={false}
   />
