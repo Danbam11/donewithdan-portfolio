@@ -1,0 +1,428 @@
+.shell {
+  --glow-x: 50%;
+  --glow-span: 240px;
+  --glow-opacity: 0;
+  width: 100%;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+  border-radius: 999px;
+}
+
+.shell::before,
+.shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse clamp(140px, calc(var(--glow-span) / 3), 220px) 90px at var(--glow-x) 50%,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(189, 251, 255, 0.96) 8%,
+    rgba(0, 247, 255, 0.72) 22%,
+    rgba(72, 122, 255, 0.34) 45%,
+    transparent 70%
+  );
+  transition: opacity 220ms ease;
+}
+
+.shell::before {
+  z-index: 2;
+  padding: 1px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.shell::after {
+  z-index: 0;
+  filter: blur(18px);
+  opacity: 0;
+}
+
+.shell[data-hovering='true']::before {
+  opacity: var(--glow-opacity);
+  animation: toolstrip-edge-shimmer 3.2s ease-in-out infinite alternate;
+}
+
+.shell[data-hovering='true']::after {
+  opacity: calc(var(--glow-opacity) * 0.58);
+  animation: toolstrip-edge-bloom 3.2s ease-in-out infinite alternate-reverse;
+}
+
+.viewport {
+  --toolstrip-fill: #0d1117;
+  --toolstrip-text: #eaf4f7;
+  --toolstrip-logo: #bdfbff;
+  --toolstrip-divider: rgba(189, 251, 255, 0.1);
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  border-radius: 999px;
+  background: var(--toolstrip-fill);
+  z-index: 1;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28), -30px 0 58px rgba(178, 255, 255, 0.09),
+    30px 0 58px rgba(0, 247, 255, 0.065);
+}
+
+.viewport::before,
+.viewport::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: 9%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.viewport::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--toolstrip-fill), transparent);
+}
+
+.viewport::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--toolstrip-fill), transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: toolstrip-marquee 33s linear infinite;
+  will-change: transform;
+}
+
+.viewport[data-offscreen] .track {
+  animation-play-state: paused;
+}
+
+.sequence {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 0 28px;
+  position: relative;
+  color: var(--toolstrip-text);
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+.itemContent {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.shell[data-hovering='true'] .item {
+  opacity: 0.52;
+}
+
+.shell[data-hovering='true'] .item[data-neighbor='true'] {
+  opacity: 0.76;
+}
+
+.shell[data-hovering='true'] .item[data-active='true'] {
+  opacity: 1;
+}
+
+.shell[data-hovering='true'] .item[data-active='true'] .itemContent {
+  transform: scale(1.15);
+}
+
+.item::after {
+  content: '';
+  align-self: stretch;
+  width: 1px;
+  margin: 21px -28px 21px 16px;
+  background: var(--toolstrip-divider);
+}
+
+.logo {
+  display: block;
+  flex: 0 0 auto;
+  width: 23px;
+  height: 23px;
+  transform: scale(var(--logo-scale, 1));
+  transform-origin: center;
+  background: var(--toolstrip-logo);
+  -webkit-mask: var(--logo-image) center / contain no-repeat;
+  mask: var(--logo-image) center / contain no-repeat;
+}
+
+.itemLogoOnly .logo {
+  width: 32px;
+  height: 32px;
+}
+
+.itemGoogleWorkspace {
+  padding-inline: 34px;
+}
+
+.itemGoogleWorkspace .logo {
+  width: 31px;
+  height: 31px;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  line-height: 1;
+}
+
+@keyframes toolstrip-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes toolstrip-edge-shimmer {
+  from {
+    filter: brightness(0.96);
+  }
+
+  to {
+    filter: brightness(1.08);
+  }
+}
+
+@keyframes toolstrip-edge-bloom {
+  from {
+    filter: blur(18px) brightness(0.96);
+  }
+
+  to {
+    filter: blur(18px) brightness(1.08);
+  }
+}
+
+@media (max-width: 1040px) {
+  .item {
+    min-height: 68px;
+    padding-inline: 24px;
+  }
+
+  .itemContent {
+    gap: 10px;
+  }
+
+  .item::after {
+    margin-inline: -24px;
+    margin-block: 19px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shell.interactive:hover .track {
+    animation-play-state: paused;
+  }
+}
+
+.shell:not(.interactive) .item,
+.shell:not(.interactive) .itemContent {
+  transition: none;
+}
+
+@media (max-width: 696px) {
+  .item {
+    gap: 10px;
+    min-height: 62px;
+    padding-inline: 20px;
+  }
+
+  .itemGoogleWorkspace {
+    padding-inline: 28px;
+  }
+
+  .item::after {
+    margin-inline: -20px;
+    margin-block: 17px;
+  }
+
+  .logo {
+    width: 21px;
+    height: 21px;
+  }
+
+  .itemLogoOnly .logo,
+  .itemGoogleWorkspace .logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .name {
+    font-size: 0.82rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    transform: none;
+  }
+
+  .sequence[aria-hidden='true'] {
+    display: none;
+  }
+
+  .itemContent,
+  .shell[data-hovering='true'] .item[data-active='true'] .itemContent {
+    transition: none;
+    transform: none;
+  }
+
+  .shell::before,
+  .shell::after {
+    animation: none;
+  }
+}
+
+@media not all and (hover: hover) and (pointer: fine) {
+  .shell[data-hovering='true'] .item,
+  .shell[data-hovering='true'] .item[data-neighbor='true'],
+  .shell[data-hovering='true'] .item[data-active='true'] {
+    opacity: 1;
+  }
+}
+
+.variantBGlowSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.variantB::before,
+.variantB::after {
+  display: none;
+}
+
+.svgGlow {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  mask-image: radial-gradient(
+    ellipse calc(var(--svg-span) / 2) 100% at var(--glow-x) 50%,
+    #000 0%,
+    #000 26%,
+    transparent 76%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse calc(var(--svg-span) / 2) 100% at var(--glow-x) 50%,
+    #000 0%,
+    #000 26%,
+    transparent 76%
+  );
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  transition: opacity 320ms ease;
+}
+
+.svgBloom {
+  --svg-span: clamp(320px, calc(var(--glow-item-width) * 3), 540px);
+  stroke: #655cff;
+  stroke-width: 14;
+  filter: url(#toolstrip-variant-b-bloom-blur);
+}
+
+.svgMedium {
+  --svg-span: clamp(220px, calc(var(--glow-item-width) * 2), 380px);
+  stroke: #9e8cff;
+  stroke-width: 6;
+  filter: url(#toolstrip-variant-b-medium-blur);
+}
+
+.svgCore {
+  --svg-span: clamp(120px, calc(var(--glow-item-width) * 1.2), 240px);
+  stroke: #ffffff;
+  stroke-width: 2.5;
+}
+
+.variantB[data-hovering='true'] .variantBGlowSvg .svgGlow {
+  opacity: var(--glow-opacity);
+}
+
+.variantB[data-hovering='true'] .variantBGlowSvg .svgBloom {
+  opacity: calc(var(--glow-opacity) * 0.34);
+}
+
+.variantB[data-hovering='true'] .variantBGlowSvg .svgMedium {
+  opacity: calc(var(--glow-opacity) * 0.62);
+}
+
+.variantB[data-hovering='true'] .variantBGlowSvg .svgCore {
+  opacity: var(--glow-opacity);
+}
+
+.variantBGlowSvg[data-debug='true'] .svgGlow {
+  mask: none;
+  -webkit-mask: none;
+  opacity: 1;
+  filter: none;
+}
+
+.variantBGlowSvg[data-debug='true'] .svgBloom {
+  stroke: #3fa8ff;
+  stroke-width: 14;
+}
+
+.variantBGlowSvg[data-debug='true'] .svgMedium {
+  stroke: #8b7cff;
+  stroke-width: 7;
+}
+
+.variantBGlowSvg[data-debug='true'] .svgCore {
+  stroke: #ffffff;
+  stroke-width: 8;
+}
+
+.variantB[data-hovering='true'] .variantBGlowSvg .svgBloom {
+  animation: variant-b-bloom-shimmer 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes variant-b-bloom-shimmer {
+  from {
+    opacity: calc(var(--glow-opacity) * 0.28);
+  }
+
+  to {
+    opacity: calc(var(--glow-opacity) * 0.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .variantB .svgGlow {
+    animation: none;
+  }
+}
