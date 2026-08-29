@@ -1,14 +1,8 @@
-import { Toolstrip as PassiveToolstrip } from '~/components/toolstrip/toolstrip';
-import { Toolstrip as DesktopToolstrip } from '~/components/toolstrip/variant-c/toolstrip-variant-c';
-import { useEffect, useState } from 'react';
-import { HeroRuntimeSpike } from '../hero-spike/hero-spike';
 import {
-  MobileHero,
-  mobileHeroGeometry,
-  mobileHeroVariants,
-} from '../mobile-hero/mobile-hero';
-import { TabletHero } from '../tablet-hero/tablet-hero';
-import styles from './hero-toolstrip-integration.module.css';
+  DesktopHeroToolstrip,
+  MobileHeroToolstrip,
+  TabletHeroToolstrip,
+} from './hero-toolstrip-integration';
 
 const reviewViewports = {
   desktop1440: {
@@ -43,99 +37,6 @@ const reviewViewports = {
   },
 };
 
-function useViewportWidth() {
-  const [width, setWidth] = useState(() =>
-    typeof window === 'undefined' ? mobileHeroGeometry.master.width : window.innerWidth
-  );
-
-  useEffect(() => {
-    const updateWidth = () => setWidth(window.innerWidth);
-
-    window.addEventListener('resize', updateWidth);
-    updateWidth();
-
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
-
-  return width;
-}
-
-function ToolstripAtmosphere({ children }) {
-  return <div className={styles.toolstripAtmosphere}>{children}</div>;
-}
-
-function HeroToolstripIntegration({ children, mode, toolstrip }) {
-  return (
-    <main className={`${styles.integration} ${styles[`${mode}Integration`]}`}>
-      {children}
-      <div className={styles.toolstripContinuation}>{toolstrip}</div>
-    </main>
-  );
-}
-
-function DesktopIntegration() {
-  return (
-    <HeroToolstripIntegration
-      mode="desktop"
-      toolstrip={
-        <div className={`${styles.toolstripSlot} ${styles.desktopToolstripSlot}`}>
-          <ToolstripAtmosphere>
-            <DesktopToolstrip glowVariant="react-bits" />
-          </ToolstripAtmosphere>
-        </div>
-      }
-    >
-      <HeroRuntimeSpike autoRotate fullView initialEntrance wireframePreview={false} />
-    </HeroToolstripIntegration>
-  );
-}
-
-function TabletIntegration() {
-  return (
-    <HeroToolstripIntegration
-      mode="tablet"
-      toolstrip={
-        <div className={`${styles.toolstripSlot} ${styles.tabletToolstripSlot}`}>
-          <ToolstripAtmosphere>
-            <PassiveToolstrip interactive={false} />
-          </ToolstripAtmosphere>
-        </div>
-      }
-    >
-      <TabletHero autoRotate initialEntrance liveBlob />
-    </HeroToolstripIntegration>
-  );
-}
-
-function MobileIntegration() {
-  const viewportWidth = useViewportWidth();
-  const approvedVariant = mobileHeroVariants[viewportWidth];
-  const scale = approvedVariant?.scale ?? viewportWidth / mobileHeroGeometry.master.width;
-  const height = approvedVariant?.height ?? mobileHeroGeometry.master.height * scale;
-
-  return (
-    <HeroToolstripIntegration
-      mode="mobile"
-      toolstrip={
-        <div className={`${styles.toolstripSlot} ${styles.mobileToolstripSlot}`}>
-          <ToolstripAtmosphere>
-            <PassiveToolstrip interactive={false} />
-          </ToolstripAtmosphere>
-        </div>
-      }
-    >
-      <MobileHero
-        autoRotate
-        height={height}
-        initialEntrance
-        liveBlob
-        scale={scale}
-        width={viewportWidth}
-      />
-    </HeroToolstripIntegration>
-  );
-}
-
 const viewportParameters = defaultViewport => ({
   viewport: {
     defaultViewport,
@@ -150,26 +51,26 @@ export default {
   },
 };
 
-export const Desktop1440 = () => <DesktopIntegration />;
+export const Desktop1440 = () => <DesktopHeroToolstrip />;
 Desktop1440.storyName = 'Desktop — 1440';
 Desktop1440.parameters = viewportParameters('desktop1440');
 
-export const Desktop1920 = () => <DesktopIntegration />;
+export const Desktop1920 = () => <DesktopHeroToolstrip />;
 Desktop1920.storyName = 'Desktop — 1920';
 Desktop1920.parameters = viewportParameters('desktop1920');
 
-export const Tablet834 = () => <TabletIntegration />;
+export const Tablet834 = () => <TabletHeroToolstrip />;
 Tablet834.storyName = 'Tablet — 834';
 Tablet834.parameters = viewportParameters('tablet834');
 
-export const Mobile390Master = () => <MobileIntegration />;
+export const Mobile390Master = () => <MobileHeroToolstrip />;
 Mobile390Master.storyName = 'Mobile — 390 MASTER';
 Mobile390Master.parameters = viewportParameters('mobile390');
 
-export const Mobile320 = () => <MobileIntegration />;
+export const Mobile320 = () => <MobileHeroToolstrip />;
 Mobile320.storyName = 'Mobile — 320';
 Mobile320.parameters = viewportParameters('mobile320');
 
-export const Mobile414 = () => <MobileIntegration />;
+export const Mobile414 = () => <MobileHeroToolstrip />;
 Mobile414.storyName = 'Mobile — 414';
 Mobile414.parameters = viewportParameters('mobile414');

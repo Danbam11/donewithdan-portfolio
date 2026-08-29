@@ -1,0 +1,12 @@
+@layer layout {
+  .root {
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  .pending {
+    width: 100%;
+    min-height: 100dvh;
+    background: #000;
+  }
+}

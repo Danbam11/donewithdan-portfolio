@@ -115,8 +115,19 @@ function BriefEyebrow({ animate, reduceMotion }) {
   );
 }
 
-function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onStateChange, width }) {
+function MobileBlobCanvas({
+  height,
+  live,
+  reduceMotion,
+  forceWebglFailure,
+  onStateChange,
+  width,
+}) {
   const canvasRef = useRef();
+  const runtimeRef = useRef();
+  const behaviorRef = useRef({ live, onStateChange, reduceMotion });
+
+  behaviorRef.current = { live, onStateChange, reduceMotion };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -136,7 +147,7 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
     let elapsed = 0;
 
     const setState = state => {
-      if (mounted) onStateChange(state);
+      if (mounted) behaviorRef.current.onStateChange(state);
     };
 
     const stop = () => {
@@ -149,8 +160,18 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
       renderer.render(scene, camera);
     };
 
-    const shouldAnimate = () =>
-      live && !reduceMotion && inViewport && !document.hidden && !contextLost && Boolean(renderer);
+    const shouldAnimate = () => {
+      const { live: isLive, reduceMotion: shouldReduceMotion } = behaviorRef.current;
+
+      return (
+        isLive &&
+        !shouldReduceMotion &&
+        inViewport &&
+        !document.hidden &&
+        !contextLost &&
+        Boolean(renderer)
+      );
+    };
 
     const renderFrame = timestamp => {
       frame = 0;
@@ -164,6 +185,8 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
     };
 
     const sync = () => {
+      const { live: isLive, reduceMotion: shouldReduceMotion } = behaviorRef.current;
+
       if (shouldAnimate()) {
         setState('running');
         if (!frame) frame = requestAnimationFrame(renderFrame);
@@ -174,8 +197,8 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
       renderStatic();
 
       if (contextLost) setState('webgl-context-lost');
-      else if (reduceMotion) setState('reduced-motion-static');
-      else if (!live) setState('static');
+      else if (shouldReduceMotion) setState('reduced-motion-static');
+      else if (!isLive) setState('static');
       else if (document.hidden) setState('hidden-tab-paused');
       else if (!inViewport) setState('offscreen-paused');
     };
@@ -202,15 +225,8 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
       });
       renderer.outputColorSpace = SRGBColorSpace;
       renderer.setClearColor(0x000000, 0);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      renderer.setSize(width, height, false);
 
-      camera = new PerspectiveCamera(
-        blobCamera.fov,
-        width / height,
-        0.1,
-        100
-      );
+      camera = new PerspectiveCamera(blobCamera.fov, 1, 0.1, 100);
       camera.position.set(...blobCamera.position);
 
       scene = new Scene();
@@ -238,6 +254,14 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
       group.add(mesh);
       scene.add(group);
 
+      runtimeRef.current = {
+        camera,
+        renderStatic,
+        renderer,
+        scene,
+        sync,
+      };
+
       if ('IntersectionObserver' in window) {
         observer = new IntersectionObserver(
           ([entry]) => {
@@ -259,17 +283,32 @@ function MobileBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
     return () => {
       mounted = false;
       stop();
+      runtimeRef.current = undefined;
       observer?.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       canvas.removeEventListener('webglcontextlost', handleContextLost);
       if (scene) cleanScene(scene);
       renderer?.renderLists?.dispose();
-      renderer?.forceContextLoss?.();
       if (renderer) cleanRenderer(renderer);
       canvas.width = 0;
       canvas.height = 0;
     };
-  }, [forceWebglFailure, height, live, onStateChange, reduceMotion, width]);
+  }, [forceWebglFailure]);
+
+  useEffect(() => {
+    const runtime = runtimeRef.current;
+    if (!runtime || !width || !height) return;
+
+    runtime.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    runtime.renderer.setSize(width, height, false);
+    runtime.camera.aspect = width / height;
+    runtime.camera.updateProjectionMatrix();
+    runtime.renderStatic();
+  }, [height, width]);
+
+  useEffect(() => {
+    runtimeRef.current?.sync();
+  }, [live, onStateChange, reduceMotion]);
 
   return <canvas aria-hidden className={styles.blobCanvas} ref={canvasRef} />;
 }
@@ -295,7 +334,10 @@ export function MobileHero({
   const handleBlobState = useCallback(state => setBlobState(state), []);
 
   return (
-    <div className={styles.reviewStage} style={{ '--stage-width': `${width}px`, '--stage-height': `${height}px` }}>
+    <div
+      className={styles.reviewStage}
+      style={{ '--stage-width': `${width}px`, '--stage-height': `${height}px` }}
+    >
       <section
         aria-labelledby="mobile-hero-title"
         className={styles.viewport}
@@ -319,25 +361,42 @@ export function MobileHero({
           <div aria-hidden className={styles.headlineDepthLayer} />
           <header className={styles.copy}>
             <p className={styles.eyebrow} data-hero-geometry="eyebrow">
-              <BriefEyebrow animate={initialEntrance} reduceMotion={Boolean(reduceMotion)} />
+              <BriefEyebrow
+                animate={initialEntrance}
+                reduceMotion={Boolean(reduceMotion)}
+              />
             </p>
             <h1 className={styles.heading} id="mobile-hero-title">
               <VisuallyHidden>
                 Automation done. Capabilities also include funnels and workflows.
               </VisuallyHidden>
-              <span aria-hidden className={styles.capability} data-hero-geometry="capability">
-                <span className={styles.activeWord} data-initial={initialEntrance && !reduceMotion}>
+              <span
+                aria-hidden
+                className={styles.capability}
+                data-hero-geometry="capability"
+              >
+                <span
+                  className={styles.activeWord}
+                  data-initial={initialEntrance && !reduceMotion}
+                >
                   {activeWord}
                   <span className={styles.cover} data-phase={coverPhase} />
                 </span>
               </span>
               <span aria-hidden className={styles.done} data-hero-geometry="done">
-                <span className={styles.doneText} data-initial={initialEntrance && !reduceMotion}>
+                <span
+                  className={styles.doneText}
+                  data-initial={initialEntrance && !reduceMotion}
+                >
                   DONE.
                   <span className={styles.doneCover} />
                 </span>
               </span>
-              <span aria-hidden className={styles.accentLine} data-hero-geometry="divider" />
+              <span
+                aria-hidden
+                className={styles.accentLine}
+                data-hero-geometry="divider"
+              />
             </h1>
           </header>
         </div>
