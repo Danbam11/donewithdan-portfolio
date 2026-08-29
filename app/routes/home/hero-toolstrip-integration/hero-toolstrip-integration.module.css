@@ -1,0 +1,127 @@
+.integration {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: #000;
+  color: #f7ffff;
+}
+
+.toolstripContinuation {
+  --continuation-start: var(--spaceL);
+  --continuation-end: var(--space3XL);
+
+  position: relative;
+  width: 100%;
+  padding-block: var(--continuation-start) var(--continuation-end);
+  overflow: visible;
+  background: #000;
+}
+
+.toolstripSlot {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.toolstripAtmosphere {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.toolstripAtmosphere::before {
+  content: '';
+  position: absolute;
+  inset: 14% 2%;
+  z-index: 0;
+  border-radius: 999px;
+  background: rgb(33 241 255 / 4%);
+  box-shadow: -28px 0 58px rgb(178 255 255 / 11%), 28px 0 58px rgb(0 247 255 / 8%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.toolstripAtmosphere > div {
+  position: relative;
+  z-index: 1;
+}
+
+.desktopToolstripSlot {
+  width: 100%;
+  padding-right: 6.6667vw;
+  padding-left: 10vw;
+}
+
+.tabletToolstripSlot {
+  width: 84.412%;
+  max-width: 704px;
+  margin-inline: auto;
+}
+
+.mobileToolstripSlot {
+  width: 83.5897%;
+  margin-inline: auto;
+}
+
+.tabletIntegration .toolstripContinuation {
+  --boundary-blend-height: 120px;
+  --continuation-start: 40px;
+  --continuation-end: 64px;
+
+  z-index: 3;
+}
+
+.mobileIntegration .toolstripContinuation {
+  --boundary-blend-height: 40px;
+  --continuation-start: 32px;
+  --continuation-end: 56px;
+}
+
+.tabletIntegration .toolstripContinuation::before,
+.mobileIntegration .toolstripContinuation::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  z-index: 2;
+  height: var(--boundary-blend-height);
+  pointer-events: none;
+}
+
+.tabletIntegration .toolstripContinuation::before {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(0 0 0 / 15%) 12%,
+    rgb(0 0 0 / 45%) 25%,
+    rgb(0 0 0 / 75%) 38%,
+    rgb(0 0 0 / 92%) 46%,
+    rgb(0 0 0 / 98.5%) 52%,
+    rgb(0 0 0 / 99.8%) 56%,
+    #000 60%,
+    #000 100%
+  );
+}
+
+.tabletIntegration .toolstripContinuation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  height: var(--continuation-start);
+  background: linear-gradient(to bottom, #000, rgb(0 0 0 / 85%) 55%, transparent);
+  pointer-events: none;
+}
+
+.mobileIntegration .toolstripContinuation::before {
+  background: linear-gradient(to bottom, transparent, rgb(0 0 0 / 42%) 58%, #000);
+}
+
+.integration :global([data-hero-runtime-state]) {
+  display: none;
+}

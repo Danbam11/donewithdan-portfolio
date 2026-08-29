@@ -2,6 +2,17 @@
   --glow-x: 50%;
   --glow-span: 240px;
   --glow-opacity: 0;
+  --toolstrip-height: 76px;
+  --toolstrip-item-padding: 28px;
+  --toolstrip-item-gap: 12px;
+  --toolstrip-logo-size: 23px;
+  --toolstrip-logo-large-size: 32px;
+  --toolstrip-google-logo-size: 31px;
+  --toolstrip-google-padding: 34px;
+  --toolstrip-font-size: 0.9rem;
+  --toolstrip-divider-block-margin: 21px;
+  --toolstrip-divider-leading-gap: 16px;
+
   width: 100%;
   position: relative;
   overflow: visible;
@@ -113,9 +124,9 @@
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: 12px;
-  min-height: 76px;
-  padding: 0 28px;
+  gap: var(--toolstrip-item-gap);
+  min-height: var(--toolstrip-height);
+  padding: 0 var(--toolstrip-item-padding);
   position: relative;
   color: var(--toolstrip-text);
   white-space: nowrap;
@@ -128,7 +139,7 @@
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--toolstrip-item-gap);
   transform-origin: center;
   transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -153,15 +164,16 @@
   content: '';
   align-self: stretch;
   width: 1px;
-  margin: 21px -28px 21px 16px;
+  margin: var(--toolstrip-divider-block-margin) calc(var(--toolstrip-item-padding) * -1)
+    var(--toolstrip-divider-block-margin) var(--toolstrip-divider-leading-gap);
   background: var(--toolstrip-divider);
 }
 
 .logo {
   display: block;
   flex: 0 0 auto;
-  width: 23px;
-  height: 23px;
+  width: var(--toolstrip-logo-size);
+  height: var(--toolstrip-logo-size);
   transform: scale(var(--logo-scale, 1));
   transform-origin: center;
   background: var(--toolstrip-logo);
@@ -170,21 +182,21 @@
 }
 
 .itemLogoOnly .logo {
-  width: 32px;
-  height: 32px;
+  width: var(--toolstrip-logo-large-size);
+  height: var(--toolstrip-logo-large-size);
 }
 
 .itemGoogleWorkspace {
-  padding-inline: 34px;
+  padding-inline: var(--toolstrip-google-padding);
 }
 
 .itemGoogleWorkspace .logo {
-  width: 31px;
-  height: 31px;
+  width: var(--toolstrip-google-logo-size);
+  height: var(--toolstrip-google-logo-size);
 }
 
 .name {
-  font-size: 0.9rem;
+  font-size: var(--toolstrip-font-size);
   font-weight: 500;
   letter-spacing: 0.015em;
   line-height: 1;
@@ -221,18 +233,17 @@
 }
 
 @media (max-width: 1040px) {
-  .item {
-    min-height: 68px;
-    padding-inline: 24px;
-  }
-
-  .itemContent {
-    gap: 10px;
-  }
-
-  .item::after {
-    margin-inline: -24px;
-    margin-block: 19px;
+  .shell {
+    --toolstrip-height: 64px;
+    --toolstrip-item-padding: 22px;
+    --toolstrip-item-gap: 10px;
+    --toolstrip-logo-size: 19px;
+    --toolstrip-logo-large-size: 27px;
+    --toolstrip-google-logo-size: 26px;
+    --toolstrip-google-padding: 29px;
+    --toolstrip-font-size: 0.76rem;
+    --toolstrip-divider-block-margin: 18px;
+    --toolstrip-divider-leading-gap: 13px;
   }
 }
 
@@ -248,34 +259,17 @@
 }
 
 @media (max-width: 696px) {
-  .item {
-    gap: 10px;
-    min-height: 62px;
-    padding-inline: 20px;
-  }
-
-  .itemGoogleWorkspace {
-    padding-inline: 28px;
-  }
-
-  .item::after {
-    margin-inline: -20px;
-    margin-block: 17px;
-  }
-
-  .logo {
-    width: 21px;
-    height: 21px;
-  }
-
-  .itemLogoOnly .logo,
-  .itemGoogleWorkspace .logo {
-    width: 28px;
-    height: 28px;
-  }
-
-  .name {
-    font-size: 0.82rem;
+  .shell {
+    --toolstrip-height: 56px;
+    --toolstrip-item-padding: 20px;
+    --toolstrip-item-gap: 9px;
+    --toolstrip-logo-size: 17px;
+    --toolstrip-logo-large-size: 23px;
+    --toolstrip-google-logo-size: 23px;
+    --toolstrip-google-padding: 25px;
+    --toolstrip-font-size: 0.66rem;
+    --toolstrip-divider-block-margin: 15px;
+    --toolstrip-divider-leading-gap: 12px;
   }
 }
 

@@ -30,6 +30,11 @@
   .hero[data-full-view='true'] {
     --full-view-headline-left: 27.8vw;
     --full-view-headline-top: 40vh;
+    --full-view-headline-size: clamp(75px, 5.208333vw, 100px);
+    --full-view-eyebrow-size: clamp(15px, 1.041667vw, 20px);
+    --full-view-done-size: clamp(82.5px, 5.729167vw, 110px);
+    --full-view-done-width: clamp(278.73px, 19.3564vw, 371.64px);
+    --full-view-rotating-max-width: clamp(536.56px, 37.26vw, 715.34px);
 
     width: 100%;
     height: auto;
@@ -120,15 +125,15 @@
   }
 
   .hero[data-full-view='true'] .eyebrow {
-    top: calc(var(--full-view-headline-top) - 66px);
+    top: calc(var(--full-view-headline-top) - 42px - var(--full-view-eyebrow-size));
     left: var(--full-view-headline-left);
     width: 500px;
-    height: 24px;
+    height: var(--full-view-eyebrow-size);
     color: #fff;
-    font-size: 24px;
+    font-size: var(--full-view-eyebrow-size);
     font-weight: var(--fontWeightMedium);
-    line-height: 24px;
-    letter-spacing: 7.2px;
+    line-height: 1;
+    letter-spacing: 0.3em;
     opacity: 0.6;
   }
 
@@ -184,28 +189,32 @@
     top: 0;
     left: 0;
     width: 859px;
-    height: 120px;
-    font-size: 120px;
-    line-height: 120px;
+    height: var(--full-view-headline-size);
+    font-size: var(--full-view-headline-size);
+    line-height: var(--full-view-headline-size);
   }
 
   .hero[data-full-view='true'] .activeWord {
-    height: 120px;
+    height: var(--full-view-headline-size);
+  }
+
+  .hero[data-full-view='true'] .cover {
+    width: var(--full-view-rotating-max-width);
   }
 
   .hero[data-full-view='true'] .done {
-    top: 120px;
+    top: var(--full-view-headline-size);
     left: 0;
-    width: 473px;
-    height: 140px;
-    font-size: 140px;
-    line-height: 140px;
+    width: var(--full-view-done-width);
+    height: var(--full-view-done-size);
+    font-size: var(--full-view-done-size);
+    line-height: var(--full-view-done-size);
   }
 
   .hero[data-full-view='true'] .accentLine {
-    top: 258px;
+    top: calc(var(--full-view-headline-size) + var(--full-view-done-size) - 2px);
     left: 0;
-    width: 473px;
+    width: var(--full-view-done-width);
     height: 2px;
   }
 
