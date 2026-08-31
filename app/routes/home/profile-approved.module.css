@@ -1,0 +1,423 @@
+.composition {
+  --master-width: 1270px;
+  --profile-height: 900px;
+  --copyright-height: 210px;
+
+  width: var(--master-width);
+  height: calc(var(--profile-height) + var(--copyright-height));
+  margin: 0 auto;
+  color: var(--white);
+  background: #000;
+  transform-origin: top center;
+}
+
+.fullFrame {
+  width: 100%;
+  min-width: 1270px;
+  overflow-x: hidden;
+  background: #000;
+}
+
+.fullFrameComposition {
+  width: 1270px;
+  height: 1110px;
+  transform-origin: top left;
+}
+
+.profile {
+  position: relative;
+  width: var(--master-width);
+  height: var(--profile-height);
+  overflow: hidden;
+  background: #000;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.copy {
+  position: absolute;
+  top: 84px;
+  left: 106px;
+  width: 496px;
+  z-index: 2;
+}
+
+.heading {
+  display: block;
+  width: 465px;
+  height: 100px;
+  margin: 0;
+  color: var(--white);
+  font-family: var(--fontStack);
+  font-size: 45px;
+  font-weight: var(--fontWeightBold);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.headingLine,
+.headingAccent {
+  display: block;
+}
+
+.headingLane {
+  position: relative;
+  display: block;
+  width: 946px;
+  height: 54px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.headingLine {
+  width: 465px;
+  height: 54px;
+  white-space: nowrap;
+}
+
+.headingLine :global([class*='_text_']) {
+  display: block;
+  width: 946px;
+  height: 54px;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.headingAccent {
+  width: 164px;
+  position: relative;
+  height: 46px;
+  line-height: 46px;
+  --delay: 1s;
+}
+
+.headingAccent,
+.highlight,
+.doneText {
+  color: #21f1ff;
+}
+
+.highlight {
+  --lineOpacity: 30%;
+  --lineStrokeWidth: 2px;
+  background: linear-gradient(#21f1ff, #21f1ff) no-repeat 100% 100% / 0
+      var(--lineStrokeWidth),
+    linear-gradient(rgb(33 241 255 / var(--lineOpacity)), rgb(33 241 255 / var(--lineOpacity)))
+      no-repeat 0 100% / 100% var(--lineStrokeWidth);
+  transition: background-size var(--durationM) var(--bezierFastoutSlowin);
+}
+
+.highlight:hover,
+.highlight:focus-visible {
+  background: linear-gradient(#21f1ff, #21f1ff) no-repeat 0 100% / 100%
+      var(--lineStrokeWidth),
+    linear-gradient(rgb(33 241 255 / var(--lineOpacity)), rgb(33 241 255 / var(--lineOpacity)))
+      no-repeat 0 100% / 100% var(--lineStrokeWidth);
+}
+
+.doneText {
+  position: relative;
+  z-index: 1;
+  visibility: hidden;
+}
+
+.body {
+  position: absolute;
+  top: 164px;
+  left: 0;
+  width: 496px;
+  height: 239px;
+  color: rgb(255 255 255 / 70%);
+  font-family: var(--fontStack);
+  font-size: 20px;
+  font-weight: var(--fontWeightMedium);
+  line-height: 1.2;
+}
+
+.body p {
+  margin: 0 0 20px;
+}
+
+.cta {
+  position: absolute;
+  top: 467px;
+  left: 0;
+  display: inline-flex;
+  width: 137px;
+  height: 22px;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 0;
+  color: rgb(33 241 255 / 80%);
+  font-family: var(--fontStack);
+  font-size: 23.26655692178086px;
+  font-weight: var(--fontWeightMedium);
+  line-height: 1;
+  letter-spacing: 0;
+  text-decoration: none;
+  isolation: isolate;
+  opacity: 0;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(33 241 255 / 20%);
+  transform: scale3d(0, 1, 1);
+  transform-origin: right;
+}
+
+.cta:hover::before,
+.cta:focus-visible::before {
+  transform: scale3d(1, 1, 1);
+  transform-origin: left;
+}
+
+@media (--mediaUseMotion) {
+  .cta::before {
+    transition: transform var(--durationM) var(--bezierFastoutSlowin);
+  }
+}
+
+.ctaLabel {
+  display: inline-flex;
+  width: 114.57px;
+  height: 22px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.ctaArrow {
+  display: inline-flex;
+  width: 18.69px;
+  height: 18.34px;
+  margin-left: 3.74px;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  flex: 0 0 18.69px;
+}
+
+.ctaArrow :global(svg) {
+  display: block;
+  width: 18.69px;
+  height: 18.34px;
+}
+
+.visual {
+  position: absolute;
+  inset: 0;
+}
+
+.portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  visibility: hidden;
+}
+
+.portraitFrame {
+  position: absolute;
+  top: 248px;
+  left: 659px;
+  width: 448.16px;
+  height: 560px;
+  overflow: hidden;
+  --delay: 1s;
+}
+
+.profileWord {
+  position: absolute;
+  top: 84px;
+  left: 1052px;
+  width: 111px;
+  height: 732px;
+  color: var(--white);
+  font-family: var(--fontStack);
+  font-size: 132.8px;
+  font-weight: var(--fontWeightBold);
+  line-height: 0.8;
+  white-space: pre;
+  z-index: 3;
+}
+
+.revealBlock {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #21ffff;
+  transform: scale3d(0, 1, 1);
+  transform-origin: left;
+  will-change: transform;
+}
+
+.headingAccent .revealBlock {
+  z-index: 2;
+}
+
+.portraitFrame .revealBlock {
+  --delay: inherit;
+}
+
+@keyframes done-content-reveal {
+  0%,
+  49.9% {
+    visibility: hidden;
+  }
+
+  50%,
+  100% {
+    visibility: visible;
+  }
+}
+
+@keyframes portrait-content-reveal {
+  0%,
+  49.9% {
+    visibility: hidden;
+  }
+
+  50%,
+  100% {
+    visibility: visible;
+  }
+}
+
+.body,
+.profileWord {
+  opacity: 0;
+}
+
+@media (--mediaUseMotion) {
+  .headingAccent .revealBlock,
+  .portraitFrame .revealBlock {
+    animation-duration: 1.8s;
+    animation-timing-function: var(--bezierFastoutSlowin);
+    animation-delay: var(--delay, 1s);
+    animation-fill-mode: both;
+  }
+
+  .doneText,
+  .portrait {
+    animation-duration: 1.8s;
+    animation-timing-function: var(--bezierFastoutSlowin);
+    animation-delay: var(--delay, 1s);
+    animation-fill-mode: both;
+  }
+
+  .doneText {
+    animation-name: done-content-reveal;
+  }
+
+  .portrait {
+    animation-name: portrait-content-reveal;
+  }
+
+  .body {
+    animation-duration: var(--durationXL);
+    animation-timing-function: var(--bezierFastoutSlowin);
+    animation-delay: 2.8s;
+    animation-fill-mode: forwards;
+  }
+
+  .cta {
+    animation-duration: var(--durationXL);
+    animation-timing-function: var(--bezierFastoutSlowin);
+    animation-delay: 2.8s;
+    animation-fill-mode: forwards;
+  }
+
+  .profileWord {
+    animation-duration: var(--durationXL);
+    animation-timing-function: var(--bezierFastoutSlowin);
+    animation-delay: 3.1s;
+    animation-fill-mode: forwards;
+  }
+}
+
+@media (--mediaReduceMotion) {
+  .body,
+  .profileWord {
+    opacity: 1;
+  }
+
+  .cta {
+    opacity: 1;
+  }
+
+  .doneText,
+  .portrait {
+    visibility: visible;
+  }
+
+  .revealBlock {
+    display: none;
+  }
+
+  .cta::before {
+    display: none;
+  }
+
+  .highlight {
+    transition: none;
+  }
+}
+
+.copyright {
+  position: relative;
+  width: var(--master-width);
+  height: var(--copyright-height);
+  box-sizing: border-box;
+  background: #000;
+}
+
+.copyright p {
+  position: absolute;
+  top: 92px;
+  left: 313px;
+  width: 474px;
+  height: 26px;
+  box-sizing: border-box;
+  margin: 0;
+  color: rgb(255 255 255 / 80%);
+  font-family: var(--fontStack);
+  font-size: 21.42px;
+  font-weight: var(--fontWeightMedium);
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.copyrightText {
+  display: block;
+  width: 474px;
+  height: 26px;
+}
+
+@media (max-width: 1270px) {
+  .composition {
+    --scale: calc(100vw / 1270);
+    width: calc(var(--master-width) * var(--scale));
+    height: calc((var(--profile-height) + var(--copyright-height)) * var(--scale));
+  }
+
+  .composition > * {
+    transform: scale(var(--scale));
+    transform-origin: top left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composition,
+  .composition > * {
+    transition: none;
+  }
+}

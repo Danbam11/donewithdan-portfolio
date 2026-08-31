@@ -68,7 +68,26 @@ This document records approved product and design direction. `docs/audit/` remai
 
 ### Profile
 
-- Exact frozen copy:
+- Desktop source of truth: `Desktop — Profile + Copyright — APPROVED MASTER`
+
+- Approved desktop copy:
+
+  `Ready to get things`
+  `DONE?`
+
+  `I build GoHighLevel systems designed to make leads, bookings, and follow-ups easier to manage.`
+
+  `With seven years in customer support, I’ve seen where customer journeys usually break—missed leads, delayed replies, forgotten follow-ups, and too much manual work. I now turn those friction points into organized systems that feel clear, reliable, and easier to run.`
+
+  `Let’s talk!`
+
+- Only `GoHighLevel` and `seven` receive the static cyan highlight treatment. Highlight animation is deferred to the next Profile phase.
+- Approved copyright: `© 2026 DonewithDan. Designed & built by Daniel.`
+
+<!-- Superseded Profile direction retained only in repository history: -->
+
+<!--
+  Exact frozen copy:
 
   `About me`
 
@@ -79,6 +98,7 @@ This document records approved product and design direction. `docs/audit/` remai
   `With nine years in customer support, I’ve seen where customer journeys usually break—missed leads, delayed replies, forgotten follow-ups, and too much manual work. I now turn those friction points into organized systems that feel clear, reliable, and easier to run.`
 
   `Send me a message →`
+-->
 
 ## SUPPLIED
 
