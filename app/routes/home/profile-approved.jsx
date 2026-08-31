@@ -3,6 +3,11 @@ import profileCtaArrowMarkup from '~/assets/profile-cta-arrow.svg?raw';
 import { DecoderText } from '~/components/decoder-text';
 import styles from './profile-approved.module.css';
 
+const profileCtaArrowAccessibleMarkup = profileCtaArrowMarkup.replace(
+  '<svg ',
+  '<svg aria-hidden="true" ',
+);
+
 const Highlight = ({ children }) => (
   <span className={styles.highlight}>{children}</span>
 );
@@ -41,7 +46,7 @@ export const ProfileApproved = () => (
           <span
             className={styles.ctaArrow}
             aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: profileCtaArrowMarkup }}
+            dangerouslySetInnerHTML={{ __html: profileCtaArrowAccessibleMarkup }}
           />
         </a>
       </div>
@@ -79,3 +84,79 @@ export const ProfileApprovedComposition = ({ animationKey = 0 }) => (
     <ProfileCopyright />
   </div>
 );
+
+export const ProfileApprovedMobile = () => (
+  <section className={styles.mobileProfile} aria-labelledby="profile-approved-mobile-title">
+    <div className={styles.mobileDecorativeProfile} aria-hidden="true">
+      PROFILE
+    </div>
+
+    <div className={styles.mobileCopy}>
+      <span className={styles.mobileSectionLabel}>PROFILE</span>
+      <h2 id="profile-approved-mobile-title" className={styles.mobileHeading}>
+        Ready to get things
+      </h2>
+      <div className={styles.mobileDone}>DONE?</div>
+
+      <div className={styles.mobileBody}>
+        <p>
+          I build <Highlight>GoHighLevel</Highlight> systems designed to make leads, bookings,
+          and follow-ups easier to manage.
+        </p>
+        <p>
+          With <Highlight>seven</Highlight> years in customer support, I’ve seen where customer
+          journeys usually break—missed leads, delayed replies, forgotten follow-ups, and too
+          much manual work. I now turn those friction points into organized systems that feel
+          clear, reliable, and easier to run.
+        </p>
+      </div>
+
+      <a className={styles.mobileCta} href="/contact">
+        <span className={styles.mobileCtaLabel}>Let&apos;s talk!</span>
+        <span
+          className={styles.mobileCtaArrow}
+          aria-hidden="true"
+          dangerouslySetInnerHTML={{ __html: profileCtaArrowAccessibleMarkup }}
+        />
+      </a>
+    </div>
+
+    <div className={styles.mobilePortraitFrame}>
+      <img
+        className={styles.mobilePortrait}
+        src={danielPortrait}
+        width="1122"
+        height="1402"
+        alt="Daniel wearing glasses and a blue shirt"
+      />
+      <span className={styles.mobilePortraitRevealBlock} aria-hidden="true" />
+    </div>
+  </section>
+);
+
+export const ProfileApprovedMobileComposition = ({ animationKey = 0 }) => (
+  <div key={animationKey} className={styles.mobileComposition}>
+    <ProfileApprovedMobile />
+    <footer className={styles.mobileCopyright}>
+      <p>© DonewithDan. Designed &amp; built by Daniel.</p>
+    </footer>
+  </div>
+);
+
+export const ProfileApprovedMobileScaledComposition = ({ width = 390, animationKey = 0 }) => {
+  const scale = width / 390;
+
+  return (
+    <div
+      className={styles.mobileScaledFrame}
+      style={{ width: `${width}px`, height: `${1274 * scale}px` }}
+    >
+      <div
+        className={styles.mobileScaledComposition}
+        style={{ transform: `scale(${scale})` }}
+      >
+        <ProfileApprovedMobileComposition animationKey={animationKey} />
+      </div>
+    </div>
+  );
+};
