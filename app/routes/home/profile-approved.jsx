@@ -1,7 +1,26 @@
 import danielPortrait from '~/assets/daniel-profile-portrait.png';
 import profileCtaArrowMarkup from '~/assets/profile-cta-arrow.svg?raw';
+import { useSyncExternalStore } from 'react';
 import { DecoderText } from '~/components/decoder-text';
 import styles from './profile-approved.module.css';
+
+const PROFILE_TABLET_BREAKPOINT = 1040;
+const PROFILE_COMPACT_MAX_WIDTH = 834;
+const PROFILE_DESKTOP_REFERENCE_WIDTH = 1440;
+const PROFILE_DESKTOP_REFERENCE_HEIGHT = 1110;
+
+function subscribeToProfileViewport(onStoreChange) {
+  window.addEventListener('resize', onStoreChange);
+  return () => window.removeEventListener('resize', onStoreChange);
+}
+
+function getProfileViewportWidth() {
+  return typeof window === 'undefined' ? null : window.innerWidth;
+}
+
+export function useProfileViewportWidth() {
+  return useSyncExternalStore(subscribeToProfileViewport, getProfileViewportWidth, () => null);
+}
 
 const profileCtaArrowAccessibleMarkup = profileCtaArrowMarkup.replace(
   '<svg ',
@@ -156,6 +175,52 @@ export const ProfileApprovedMobileScaledComposition = ({ width = 390, animationK
         style={{ transform: `scale(${scale})` }}
       >
         <ProfileApprovedMobileComposition animationKey={animationKey} />
+      </div>
+    </div>
+  );
+};
+
+export const ProfileApprovedResponsive = ({ animationKey = 0 }) => {
+  const viewportWidth = useProfileViewportWidth();
+
+  if (viewportWidth === null) {
+    return <div className={styles.responsivePending} aria-hidden="true" />;
+  }
+
+  if (viewportWidth <= PROFILE_TABLET_BREAKPOINT) {
+    const effectiveCompactWidth = Math.min(viewportWidth, PROFILE_COMPACT_MAX_WIDTH);
+    const compactScale = effectiveCompactWidth / 390;
+
+    return (
+      <div
+        className={styles.responsiveCompactFrame}
+        style={{ width: `${viewportWidth}px`, height: `${1274 * compactScale}px` }}
+      >
+        <ProfileApprovedMobileScaledComposition
+          width={effectiveCompactWidth}
+          animationKey={animationKey}
+        />
+      </div>
+    );
+  }
+
+  const scale = viewportWidth / PROFILE_DESKTOP_REFERENCE_WIDTH;
+
+  return (
+    <div
+      className={styles.fullFrame}
+      style={{
+        width: `${viewportWidth}px`,
+        minWidth: `${viewportWidth}px`,
+        height: `${PROFILE_DESKTOP_REFERENCE_HEIGHT * scale}px`,
+        minHeight: `${PROFILE_DESKTOP_REFERENCE_HEIGHT * scale}px`,
+      }}
+    >
+      <div
+        className={styles.fullFrameComposition}
+        style={{ transform: `translateX(${170 * scale}px) scale(${scale})` }}
+      >
+        <ProfileApprovedComposition animationKey={animationKey} />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import {
   ProfileApprovedComposition,
   ProfileApprovedMobileComposition,
   ProfileApprovedMobileScaledComposition,
+  ProfileApprovedResponsive,
 } from './profile-approved';
 import styles from './profile-approved.module.css';
 
@@ -74,3 +75,12 @@ export const Tablet834 = ({ animationKey = 0 }) => (
 Tablet834.storyName = 'Tablet Master — 834';
 Tablet834.args = { animationKey: 0 };
 Tablet834.parameters = { viewport: { defaultViewport: 'tablet834', viewports: reviewViewports } };
+
+export const ResponsiveResize = {
+  args: { animationKey: 0 },
+  render: ({ animationKey }) => <ProfileApprovedResponsive animationKey={animationKey} />,
+};
+ResponsiveResize.storyName = 'Responsive — Resize Viewport';
+ResponsiveResize.parameters = {
+  viewport: { defaultViewport: 'desktop1440', viewports: reviewViewports },
+};
