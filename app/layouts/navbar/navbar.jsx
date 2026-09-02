@@ -1,19 +1,16 @@
-import { Icon } from '~/components/icon';
-import { Monogram } from '~/components/monogram';
 import { useTheme } from '~/components/theme-provider';
 import { tokens } from '~/components/theme-provider/theme';
 import { Transition } from '~/components/transition';
 import { useScrollToHash, useWindowSize } from '~/hooks';
 import { Link as RouterLink, useLocation } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
-import { cssProps, media, msToNum, numToMs } from '~/utils/style';
+import { cssProps, msToNum, numToMs } from '~/utils/style';
 import { NavToggle } from './nav-toggle';
-import { ThemeToggle } from './theme-toggle';
 import { navLinks, socialLinks } from './nav-data';
-import config from '~/config.json';
+import donewithdanLogo from '~/assets/nav-bar/donewithdan-logo.svg';
 import styles from './navbar.module.css';
 
-export const Navbar = () => {
+export const Navbar = ({ prefetch = 'intent' }) => {
   const [current, setCurrent] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
   const [target, setTarget] = useState();
@@ -21,7 +18,6 @@ export const Navbar = () => {
   const location = useLocation();
   const windowSize = useWindowSize();
   const headerRef = useRef();
-  const isMobile = windowSize.width <= media.mobile || windowSize.height <= 696;
   const scrollToHash = useScrollToHash();
 
   useEffect(() => {
@@ -143,14 +139,21 @@ export const Navbar = () => {
     <header className={styles.navbar} ref={headerRef}>
       <RouterLink
         unstable_viewTransition
-        prefetch="intent"
-        to={location.pathname === '/' ? '/#intro' : '/'}
+        prefetch={prefetch}
+        to="/#intro"
         data-navbar-item
         className={styles.logo}
-        aria-label={`${config.name}, ${config.role}`}
+        aria-label="DonewithDan"
         onClick={handleMobileNavClick}
       >
-        <Monogram highlight />
+        <span
+          className={styles.logoMark}
+          style={{ '--logo-image': `url(${donewithdanLogo})` }}
+          aria-hidden="true"
+        >
+          <span className={styles.logoBase} />
+          <span className={styles.logoHighlight} />
+        </span>
       </RouterLink>
       <NavToggle onClick={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} />
       <nav className={styles.nav}>
@@ -158,7 +161,7 @@ export const Navbar = () => {
           {navLinks.map(({ label, pathname }) => (
             <RouterLink
               unstable_viewTransition
-              prefetch="intent"
+              prefetch={prefetch}
               to={pathname}
               key={label}
               data-navbar-item
@@ -178,7 +181,7 @@ export const Navbar = () => {
             {navLinks.map(({ label, pathname }, index) => (
               <RouterLink
                 unstable_viewTransition
-                prefetch="intent"
+                prefetch={prefetch}
                 to={pathname}
                 key={label}
                 className={styles.mobileNavLink}
@@ -195,11 +198,9 @@ export const Navbar = () => {
               </RouterLink>
             ))}
             <NavbarIcons />
-            <ThemeToggle isMobile />
           </nav>
         )}
       </Transition>
-      {!isMobile && <ThemeToggle data-navbar-item />}
     </header>
   );
 };
@@ -216,7 +217,11 @@ const NavbarIcons = ({ desktop }) => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Icon className={styles.navIcon} icon={icon} />
+        <span
+          className={styles.navIcon}
+          style={{ '--icon-image': `url(${icon})` }}
+          aria-hidden="true"
+        />
       </a>
     ))}
   </div>

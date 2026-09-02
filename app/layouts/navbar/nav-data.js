@@ -1,13 +1,11 @@
-import config from '~/config.json';
+import facebookIcon from '~/assets/nav-bar/facebook.svg';
+import instagramIcon from '~/assets/nav-bar/instagram.svg';
+import linkedinIcon from '~/assets/nav-bar/linkedin.svg';
 
 export const navLinks = [
   {
     label: 'Projects',
     pathname: '/#project-1',
-  },
-  {
-    label: 'Details',
-    pathname: '/#details',
   },
   {
     label: 'Articles',
@@ -21,18 +19,18 @@ export const navLinks = [
 
 export const socialLinks = [
   {
-    label: 'Bluesky',
-    url: `https://bsky.app/profile/${config.bluesky}`,
-    icon: 'bluesky',
+    label: 'Facebook',
+    url: 'https://www.facebook.com/DonewithDan',
+    icon: facebookIcon,
   },
   {
-    label: 'Figma',
-    url: `https://www.figma.com/${config.figma}`,
-    icon: 'figma',
+    label: 'Instagram',
+    url: 'https://www.instagram.com/donewithdan11/',
+    icon: instagramIcon,
   },
   {
-    label: 'Github',
-    url: `https://github.com/${config.github}`,
-    icon: 'github',
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/donewithdan/',
+    icon: linkedinIcon,
   },
 ];

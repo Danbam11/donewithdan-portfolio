@@ -7,31 +7,114 @@
     align-items: center;
     justify-content: flex-start;
     padding: 0;
-    width: var(--space2XL);
+    width: 170px;
     position: fixed;
-    top: var(--spaceOuter);
-    left: var(--spaceOuter);
-    bottom: var(--spaceOuter);
+    top: 0;
+    left: 0;
+    bottom: 0;
     z-index: var(--zIndex4);
     isolation: isolate;
+    background: #0a0f10;
 
     @media (--mediaMobile) {
       --headerNavFontSize: calc((22 / 16) * 1rem);
     }
 
     @media (--mediaMobile), (--mediaMobileLS) {
+      top: var(--spaceOuter);
+      left: var(--spaceOuter);
       bottom: auto;
+      width: var(--space2XL);
     }
   }
 
   .logo {
     display: flex;
     position: relative;
-    padding: var(--spaceS) var(--spaceS) var(--spaceL);
+    width: 88px;
+    height: 54px;
+    padding: 0;
+    margin-top: 53px;
     z-index: var(--zIndex2);
 
-    @media (--mediaMobile) {
-      padding-bottom: var(--spaceS);
+    @media (--mediaMobile), (--mediaMobileLS) {
+      padding: 0;
+      width: 80px;
+      height: 50px;
+      margin-top: 0;
+    }
+  }
+
+  .logoMark {
+    position: relative;
+    display: block;
+    width: 88px;
+    height: 54px;
+    margin: 0;
+    overflow: visible;
+    -webkit-mask-image: var(--logo-image);
+    mask-image: var(--logo-image);
+    -webkit-mask-position: center 34%;
+    mask-position: center 34%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 157px 222px;
+    mask-size: 157px 222px;
+
+    .logoBase,
+    .logoHighlight {
+      position: absolute;
+      inset: 0;
+      background: var(--textTitle);
+    }
+
+    .logoHighlight {
+      background: var(--accent);
+      opacity: 0;
+      transform: scale3d(1, 0, 1);
+      transform-origin: top;
+      transition: opacity 0.1s ease var(--durationM);
+    }
+
+    @media (--mediaUseMotion) {
+      .logoHighlight {
+        transition: transform var(--durationM) var(--bezierFastoutSlowin),
+          opacity 0.1s ease var(--durationM);
+      }
+    }
+
+    :is(a:hover, a:focus-visible) & .logoHighlight {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+      transform-origin: bottom;
+      transition: opacity 0.1s ease;
+
+      @media (--mediaUseMotion) {
+        transition: transform var(--durationM) var(--bezierFastoutSlowin),
+          opacity 0.1s ease;
+      }
+    }
+
+    @media not (--mediaUseMotion) {
+      :is(a:hover, a:focus-visible) & .logoHighlight {
+        transform: none;
+      }
+    }
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      width: 80px;
+      height: 50px;
+      margin: 0;
+      -webkit-mask-size: 141px 200px;
+      mask-size: 141px 200px;
+
+      .logoBase,
+      .logoHighlight {
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 50px;
+      }
     }
   }
 
@@ -106,12 +189,16 @@
     justify-content: center;
     position: relative;
     z-index: var(--zIndex2);
+    gap: 4px;
+    margin-bottom: 32px;
 
     @media (--mediaMobile), (--mediaMobileLS) {
       flex-direction: row;
       position: absolute;
       bottom: var(--spaceXL);
       left: var(--spaceXL);
+      gap: 4px;
+      margin-bottom: 0;
     }
 
     @media (max-width: 820px) and (max-height: 420px) {
@@ -128,10 +215,15 @@
     align-items: center;
     justify-content: center;
     padding: var(--spaceS);
-    width: var(--space2XL);
-    height: var(--space2XL);
+    width: 100px;
+    height: 48px;
     color: var(--textLight);
     transition: color var(--durationM) var(--bezierFastoutSlowin);
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      width: 44px;
+      height: 44px;
+    }
 
     &:hover,
     &:active {
@@ -140,8 +232,24 @@
   }
 
   .navIcon {
-    fill: currentColor;
-    transition: fill var(--durationM) ease;
+    display: block;
+    width: 32px;
+    height: 32px;
+    background: currentColor;
+    -webkit-mask-image: var(--icon-image);
+    mask-image: var(--icon-image);
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    transition: background var(--durationM) ease;
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      width: 29px;
+      height: 29px;
+    }
   }
 
   .mobileNav {
@@ -149,7 +257,7 @@
 
     position: fixed;
     inset: 0;
-    background: color-mix(in lab, var(--background) 70%, transparent);
+    background: color-mix(in lab, #0a0f10 92%, transparent);
     transform: translate3d(0, -100%, 0);
     transition-property: background;
     transition-duration: var(--durationL);
