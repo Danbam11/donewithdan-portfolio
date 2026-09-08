@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
   useFetcher,
   useLoaderData,
+  useLocation,
   useNavigation,
   useRouteError,
 } from '@remix-run/react';
@@ -80,7 +81,10 @@ export const loader = async ({ request, context }) => {
 export default function App() {
   let { canonicalUrl, theme } = useLoaderData();
   const fetcher = useFetcher();
+  const { pathname } = useLocation();
   const { state } = useNavigation();
+  const isHaircutDone =
+    pathname === '/projects/haircutdone' || pathname === '/projects/haircutdone/';
 
   if (fetcher.formData?.has('theme')) {
     theme = fetcher.formData.get('theme');
@@ -118,16 +122,16 @@ export default function App() {
       </head>
       <body data-theme={theme}>
         <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
-          <Progress />
+          {!isHaircutDone && <Progress />}
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
             Skip to main content
           </VisuallyHidden>
-          <Navbar />
+          {!isHaircutDone && <Navbar />}
           <main
             id="main-content"
             className={styles.container}
             tabIndex={-1}
-            data-loading={state === 'loading'}
+            data-loading={isHaircutDone ? undefined : state === 'loading'}
           >
             <Outlet />
           </main>

@@ -7,7 +7,6 @@ import { Intro } from './intro';
 import { Gaps } from './gaps';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
-import { SystemWorkflowSpike } from './system/system';
 import { useEffect, useRef, useState } from 'react';
 import config from '~/config.json';
 import styles from './home.module.css';
@@ -109,7 +108,6 @@ export const Home = () => {
           ],
         }}
       />
-      <SystemWorkflowSpike perspectiveEntrance />
       <Gaps />
       <Profile
         sectionRef={details}
