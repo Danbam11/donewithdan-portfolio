@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('../../assets/fonts/Archivo_Black/ArchivoBlack-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Tight';
+  src: url('../../assets/fonts/Inter_Tight/static/InterTight-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.section {
+  position: relative;
+  width: 1440px;
+  height: 1000px;
+  overflow: hidden;
+  background: #151515;
+  color: #e6ded5;
+  font-synthesis: none;
+}
+
+.titleTrigger {
+  position: absolute;
+  top: 86px;
+  left: 49px;
+  width: 977px;
+  height: 100px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.label {
+  position: absolute;
+  z-index: 2;
+  top: 86px;
+  left: 49px;
+  width: 300px;
+  height: 28px;
+  margin: 0;
+  color: #ae1b1e;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.heading {
+  position: absolute;
+  z-index: 2;
+  top: 114px;
+  left: 49px;
+  width: 977px;
+  height: 72px;
+  margin: 0;
+  color: #e6ded5;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.videoStage {
+  position: absolute;
+  z-index: 1;
+  top: 246px;
+  left: 160px;
+  width: 1120px;
+  aspect-ratio: 120 / 59;
+  overflow: visible;
+}
+
+.filterDefinition {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.video {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  filter: url('#haircutdone-video-backlight');
+}

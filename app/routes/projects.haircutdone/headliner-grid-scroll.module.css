@@ -1,0 +1,155 @@
+:global(html):has(.page) {
+  position: relative;
+}
+
+.page {
+  --red: #ae1b1e;
+  --cream: #e6ded5;
+
+  position: relative;
+  width: 1440px;
+  overflow-x: clip;
+  background: #151515;
+}
+
+.stage {
+  position: relative;
+  width: 1440px;
+  height: 2000px;
+  background: #151515;
+}
+
+.floatingBack {
+  position: fixed;
+  z-index: 20;
+}
+
+.stickyViewport {
+  position: sticky;
+  top: 0;
+  width: 1440px;
+  height: 800px;
+  overflow: hidden;
+  background: #151515;
+}
+
+.heroLayer,
+.gridComposition {
+  position: absolute;
+}
+
+.heroLayer {
+  z-index: 2;
+  inset: 0;
+  width: var(--haircutdone-web-master-width, 1440px);
+  height: 800px;
+  will-change: transform, opacity;
+}
+
+.heroLayer :global(section) {
+  background: transparent;
+}
+
+.heroLayerReady :global(img) {
+  transform: translate3d(var(--pole-x), 0, 0) !important;
+}
+
+.heroLayerReady :global(p) {
+  transform: translate3d(0, var(--description-y), 0) !important;
+}
+
+.gridComposition {
+  z-index: 1;
+  top: 38.5px;
+  left: var(--haircutdone-grid-left, 96px);
+  width: 1248px;
+  height: 723px;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.column {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 400px;
+  height: 723px;
+  transform-origin: center;
+}
+
+.column1 {
+  left: 0;
+}
+
+.column2 {
+  left: 424px;
+}
+
+.column3 {
+  left: 848px;
+}
+
+.cardMotion {
+  width: 400px;
+  height: 225px;
+  will-change: transform;
+}
+
+.continuation {
+  width: 100%;
+  height: 400px;
+  background: #151515;
+}
+
+.reducedPage {
+  min-height: 2000px;
+}
+
+.webPage {
+  overflow-x: clip;
+}
+
+.webStage {
+  position: relative;
+  background: #151515;
+}
+
+.webStickyViewport {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  background: #151515;
+}
+
+.webViewportOffset {
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+}
+
+.webMasterViewport,
+.webReducedMaster,
+.webReducedOpeningMaster {
+  position: relative;
+  width: 1440px;
+  height: 800px;
+  transform-origin: top left;
+}
+
+.webContinuation {
+  background: #151515;
+}
+
+.webReducedOpening,
+.webReducedGrid {
+  position: relative;
+  overflow: hidden;
+  background: #151515;
+}
+
+.webReducedOpeningMaster {
+  position: absolute;
+  left: 0;
+}

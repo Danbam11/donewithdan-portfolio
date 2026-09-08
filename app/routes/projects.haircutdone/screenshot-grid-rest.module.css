@@ -1,0 +1,251 @@
+@font-face {
+  font-family: 'Inter Tight';
+  src: url('../../assets/fonts/Inter_Tight/static/InterTight-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Tight';
+  src: url('../../assets/fonts/Inter_Tight/static/InterTight-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+.canvas {
+  position: relative;
+  width: 1440px;
+  height: 800px;
+  overflow: hidden;
+  background: #151515;
+  font-synthesis: none;
+}
+
+.grid {
+  position: absolute;
+  top: 38.5px;
+  left: 96px;
+  display: grid;
+  grid-template-columns: repeat(3, 400px);
+  grid-template-rows: repeat(3, 225px);
+  gap: 24px;
+  width: 1248px;
+  height: 723px;
+}
+
+.card {
+  position: relative;
+  width: 400px;
+  height: 225px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.cardZoomable {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  appearance: none;
+  cursor: zoom-in;
+}
+
+.zoomSourceHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.blurStack {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(20% 0 0);
+  transition: opacity 240ms ease-out;
+}
+
+.blurLayer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.06);
+  transform-origin: center;
+}
+
+.blurLight {
+  filter: blur(8px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 20%,
+    rgb(0 0 0 / 18%) 26%,
+    rgb(0 0 0 / 60%) 38%,
+    #000 52%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 20%,
+    rgb(0 0 0 / 18%) 26%,
+    rgb(0 0 0 / 60%) 38%,
+    #000 52%
+  );
+}
+
+.blurSoft {
+  filter: blur(16px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 34%,
+    rgb(0 0 0 / 18%) 40%,
+    rgb(0 0 0 / 58%) 50%,
+    #000 63%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 34%,
+    rgb(0 0 0 / 18%) 40%,
+    rgb(0 0 0 / 58%) 50%,
+    #000 63%
+  );
+}
+
+.blurModerate {
+  filter: blur(28px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 49%,
+    rgb(0 0 0 / 18%) 55%,
+    rgb(0 0 0 / 58%) 64%,
+    #000 75%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 49%,
+    rgb(0 0 0 / 18%) 55%,
+    rgb(0 0 0 / 58%) 64%,
+    #000 75%
+  );
+}
+
+.blurStrong {
+  filter: blur(42px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 64%,
+    rgb(0 0 0 / 18%) 70%,
+    rgb(0 0 0 / 58%) 79%,
+    #000 89%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 64%,
+    rgb(0 0 0 / 18%) 70%,
+    rgb(0 0 0 / 58%) 79%,
+    #000 89%
+  );
+}
+
+.blurMaximum {
+  filter: blur(60px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 78%,
+    rgb(0 0 0 / 12%) 84%,
+    rgb(0 0 0 / 60%) 92%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 78%,
+    rgb(0 0 0 / 12%) 84%,
+    rgb(0 0 0 / 60%) 92%,
+    #000 100%
+  );
+}
+
+.title {
+  position: absolute;
+  z-index: 2;
+  bottom: 20px;
+  left: 22px;
+  margin: 0;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease-out;
+}
+
+.card:hover .blurStack,
+.card:hover .title {
+  opacity: 1;
+}
+
+.titleDark {
+  color: #151515;
+}
+
+.titleCream {
+  color: #e6ded5;
+}
+
+.zoomBackdrop {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #151515;
+  color: inherit;
+  cursor: zoom-out;
+}
+
+.zoomFrame {
+  position: fixed;
+  overflow: hidden;
+  background: #151515;
+  cursor: zoom-out;
+  outline: none;
+}
+
+.zoomImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Future choreography keeps 48px of #151515 between the headliner and grid. */
+
+@media (prefers-reduced-motion: reduce) {
+  .blurStack,
+  .title {
+    transition: none;
+  }
+}
