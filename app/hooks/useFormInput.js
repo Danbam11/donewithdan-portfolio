@@ -28,11 +28,18 @@ export function useFormInput(initialValue = '') {
     }
   };
 
+  const reset = () => {
+    setValue(initialValue);
+    setError(undefined);
+    setIsDirty(false);
+  };
+
   return {
     value,
     error,
     onChange: handleChange,
     onBlur: handleBlur,
     onInvalid: handleInvalid,
+    reset,
   };
 }

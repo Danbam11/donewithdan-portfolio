@@ -137,10 +137,6 @@
   }
 }
 
-.botkiller {
-  display: none;
-}
-
 .button {
   --buttonLoaderDelay: var(--durationL);
 
@@ -303,12 +299,4 @@
 .formErrorIcon {
   flex: 0 0 auto;
   margin-right: var(--spaceS);
-}
-
-.footer {
-  opacity: 0;
-
-  &:global {
-    animation: fade-in var(--durationL) ease var(--durationXL) forwards;
-  }
 }
