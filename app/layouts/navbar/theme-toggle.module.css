@@ -9,7 +9,7 @@
     right: var(--inset);
     transform: translate3d(0, 0, 0);
 
-    @media (--mediaMobile), (--mediaMobileLS) {
+    @media (--mediaMobile) {
       &:not([data-mobile='true']) {
         display: none;
       }
