@@ -1,4 +1,4 @@
-import { SystemWorkflowSpike } from './system';
+import { SystemWorkflow, SystemWorkflowSpike } from './system';
 
 // Storybook spike-only: creates enough native page scroll to move the actual
 // WorkflowBoard host fully outside the viewport for IntersectionObserver testing.
@@ -25,13 +25,13 @@ function OffscreenTestSpace({ position }) {
 
 export default {
   title: 'SYSTEM / WorkflowBoard',
-  component: SystemWorkflowSpike,
+  component: SystemWorkflow,
 };
 
 export const ProductionDesktop = () => (
   <>
     <OffscreenTestSpace position="before — 170px desktop rail is reserved by SYSTEM" />
-    <SystemWorkflowSpike perspectiveEntrance />
+    <SystemWorkflow perspectiveEntrance />
     <OffscreenTestSpace position="after — inspect the settled board, description, and CTA" />
   </>
 );

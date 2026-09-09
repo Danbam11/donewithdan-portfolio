@@ -474,7 +474,12 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
               A connected GoHighLevel journey for recommendations, booking, reminders, recovery,
               and follow-up.
             </p>
-            <Button className={styles.cta} iconEnd="arrow-right" iconHoverShift>
+            <Button
+              className={styles.cta}
+              iconEnd="arrow-right"
+              iconHoverShift
+              href="/projects/haircutdone"
+            >
               View the full system
             </Button>
           </motion.div>
@@ -524,4 +529,8 @@ export function SystemWorkflowSpike({ perspectiveEntrance = false, diagnostics =
       {boardPresentation}
     </section>
   );
+}
+
+export function SystemWorkflow({ perspectiveEntrance = false }) {
+  return <SystemWorkflowSpike perspectiveEntrance={perspectiveEntrance} />;
 }
