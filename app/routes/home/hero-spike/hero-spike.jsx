@@ -1,7 +1,7 @@
 import { DecoderText } from '~/components/decoder-text';
 import { VisuallyHidden } from '~/components/visually-hidden';
 import { useReducedMotion, useSpring } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Group,
   Mesh,
@@ -159,6 +159,8 @@ function TwistedBlobCanvas({
   fullView,
   onStateChange,
   rotationStrength,
+  shaderRevealed,
+  shaderState,
   wireframePreview,
 }) {
   const canvasRef = useRef();
@@ -455,7 +457,15 @@ function TwistedBlobCanvas({
     wireframePreview,
   ]);
 
-  return <canvas aria-hidden className={styles.canvas} ref={canvasRef} />;
+  return (
+    <canvas
+      aria-hidden
+      className={styles.canvas}
+      data-shader-revealed={shaderRevealed}
+      data-shader-state={shaderState}
+      ref={canvasRef}
+    />
+  );
 }
 
 export function HeroRuntimeSpike({
@@ -469,8 +479,10 @@ export function HeroRuntimeSpike({
   forceWebglFailure = false,
   fullView = false,
   initialEntrance = true,
+  onShaderStateChange,
   pointerRotationStrength: rotationStrength = pointerRotationStrength,
   reducedMotion,
+  shaderRevealed = true,
   wireframePreview = false,
 }) {
   const heroRef = useRef();
@@ -482,6 +494,13 @@ export function HeroRuntimeSpike({
     reduceMotion,
   });
   const [runtimeState, setRuntimeState] = useState('initializing');
+  const handleRuntimeState = useCallback(
+    state => {
+      setRuntimeState(state);
+      onShaderStateChange?.(state);
+    },
+    [onShaderStateChange]
+  );
   const HeroStageTag = fullView ? 'div' : 'section';
 
   const heroStage = (
@@ -501,9 +520,11 @@ export function HeroRuntimeSpike({
         forceWebglFailure={forceWebglFailure}
         fullView={fullView}
         heroRef={heroRef}
-        onStateChange={setRuntimeState}
+        onStateChange={handleRuntimeState}
         reduceMotion={reduceMotion}
         rotationStrength={rotationStrength}
+        shaderRevealed={shaderRevealed}
+        shaderState={runtimeState}
         wireframePreview={wireframePreview}
       />
       <div aria-hidden className={styles.depthLayer} />

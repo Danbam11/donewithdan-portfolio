@@ -319,8 +319,10 @@ export function MobileHero({
   height = mobileHeroVariants[390].height,
   initialEntrance = true,
   liveBlob = false,
+  onShaderStateChange,
   reducedMotion,
   scale = mobileHeroVariants[390].scale,
+  shaderRevealed = true,
   width = mobileHeroVariants[390].width,
 }) {
   const prefersReducedMotion = useReducedMotion();
@@ -331,7 +333,13 @@ export function MobileHero({
     reduceMotion,
   });
   const [blobState, setBlobState] = useState('initializing');
-  const handleBlobState = useCallback(state => setBlobState(state), []);
+  const handleBlobState = useCallback(
+    state => {
+      setBlobState(state);
+      onShaderStateChange?.(state);
+    },
+    [onShaderStateChange]
+  );
 
   return (
     <div
@@ -345,7 +353,11 @@ export function MobileHero({
         data-reduce-motion={Boolean(reduceMotion)}
         style={{ width, height }}
       >
-        <div className={styles.canvasLayer}>
+        <div
+          className={styles.canvasLayer}
+          data-shader-revealed={shaderRevealed}
+          data-shader-state={blobState}
+        >
           <div aria-hidden className={styles.blobFallback} />
           <MobileBlobCanvas
             forceWebglFailure={forceWebglFailure}

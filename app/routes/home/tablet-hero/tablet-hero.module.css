@@ -20,7 +20,21 @@
     position: absolute;
     inset: 0;
     z-index: 1;
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 800ms var(--bezierFastoutSlowin);
+  }
+
+  .canvasLayer[data-shader-revealed='true'] {
+    opacity: 1;
+  }
+
+  .viewport[data-reduce-motion='true'] .canvasLayer {
+    transition: none;
+  }
+
+  .canvasLayer[data-shader-state='webgl-unavailable'] {
+    transition: none;
   }
 
   .composition {
@@ -53,8 +67,11 @@
 
   .blobFallback {
     z-index: 0;
-    background:
-      radial-gradient(ellipse 72% 84% at 82% 44%, rgb(33 241 255 / 42%), transparent 58%),
+    background: radial-gradient(
+        ellipse 72% 84% at 82% 44%,
+        rgb(33 241 255 / 42%),
+        transparent 58%
+      ),
       radial-gradient(ellipse 58% 72% at 66% 74%, rgb(48 30 145 / 56%), transparent 68%),
       #030b1d;
     opacity: 0.82;

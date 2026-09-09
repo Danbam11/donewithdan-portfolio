@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useCallback, useState, useSyncExternalStore } from 'react';
 import {
   DesktopHeroToolstrip,
   MobileHeroToolstrip,
@@ -41,11 +41,31 @@ export function useHeroBreakpoint() {
 
 export function HeroSection() {
   const breakpoint = useHeroBreakpoint();
+  const [shaderRevealed, setShaderRevealed] = useState(false);
+  const handleShaderStateChange = useCallback(() => setShaderRevealed(true), []);
   let composition;
 
-  if (breakpoint === 'mobile') composition = <MobileHeroToolstrip />;
-  else if (breakpoint === 'tablet') composition = <TabletHeroToolstrip />;
-  else if (breakpoint === 'desktop') composition = <DesktopHeroToolstrip />;
+  if (breakpoint === 'mobile')
+    composition = (
+      <MobileHeroToolstrip
+        onShaderStateChange={handleShaderStateChange}
+        shaderRevealed={shaderRevealed}
+      />
+    );
+  else if (breakpoint === 'tablet')
+    composition = (
+      <TabletHeroToolstrip
+        onShaderStateChange={handleShaderStateChange}
+        shaderRevealed={shaderRevealed}
+      />
+    );
+  else if (breakpoint === 'desktop')
+    composition = (
+      <DesktopHeroToolstrip
+        onShaderStateChange={handleShaderStateChange}
+        shaderRevealed={shaderRevealed}
+      />
+    );
   else
     composition = (
       <div aria-hidden className={styles.pending} data-hero-section-pending />

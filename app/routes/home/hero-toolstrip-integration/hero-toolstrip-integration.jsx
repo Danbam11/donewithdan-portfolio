@@ -43,7 +43,7 @@ function HeroToolstripIntegration({ children, mode, toolstrip }) {
   );
 }
 
-export function DesktopHeroToolstrip() {
+export function DesktopHeroToolstrip({ onShaderStateChange, shaderRevealed }) {
   return (
     <HeroToolstripIntegration
       mode="desktop"
@@ -55,12 +55,19 @@ export function DesktopHeroToolstrip() {
         </div>
       }
     >
-      <HeroRuntimeSpike autoRotate fullView initialEntrance wireframePreview={false} />
+      <HeroRuntimeSpike
+        autoRotate
+        fullView
+        initialEntrance
+        onShaderStateChange={onShaderStateChange}
+        shaderRevealed={shaderRevealed}
+        wireframePreview={false}
+      />
     </HeroToolstripIntegration>
   );
 }
 
-export function TabletHeroToolstrip() {
+export function TabletHeroToolstrip({ onShaderStateChange, shaderRevealed }) {
   return (
     <HeroToolstripIntegration
       mode="tablet"
@@ -72,12 +79,18 @@ export function TabletHeroToolstrip() {
         </div>
       }
     >
-      <TabletHero autoRotate initialEntrance liveBlob />
+      <TabletHero
+        autoRotate
+        initialEntrance
+        liveBlob
+        onShaderStateChange={onShaderStateChange}
+        shaderRevealed={shaderRevealed}
+      />
     </HeroToolstripIntegration>
   );
 }
 
-export function MobileHeroToolstrip() {
+export function MobileHeroToolstrip({ onShaderStateChange, shaderRevealed }) {
   const viewportWidth = useViewportWidth();
   const approvedVariant = mobileHeroVariants[viewportWidth];
   const scale = approvedVariant?.scale ?? viewportWidth / mobileHeroGeometry.master.width;
@@ -99,7 +112,9 @@ export function MobileHeroToolstrip() {
         height={height}
         initialEntrance
         liveBlob
+        onShaderStateChange={onShaderStateChange}
         scale={scale}
+        shaderRevealed={shaderRevealed}
         width={viewportWidth}
       />
     </HeroToolstripIntegration>

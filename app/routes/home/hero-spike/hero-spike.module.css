@@ -57,7 +57,21 @@
     z-index: 0;
     width: 100%;
     height: 100%;
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 800ms var(--bezierFastoutSlowin);
+  }
+
+  .canvas[data-shader-revealed='true'] {
+    opacity: 1;
+  }
+
+  .hero[data-reduce-motion='true'] .canvas {
+    transition: none;
+  }
+
+  .canvas[data-shader-state='webgl-unavailable'] {
+    transition: none;
   }
 
   .depthLayer {

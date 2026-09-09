@@ -111,7 +111,14 @@ function TabletEyebrow({ animate, reduceMotion }) {
   );
 }
 
-function TabletBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onStateChange, width }) {
+function TabletBlobCanvas({
+  height,
+  live,
+  reduceMotion,
+  forceWebglFailure,
+  onStateChange,
+  width,
+}) {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -146,7 +153,12 @@ function TabletBlobCanvas({ height, live, reduceMotion, forceWebglFailure, onSta
     };
 
     const shouldAnimate = () =>
-      live && !reduceMotion && inViewport && !document.hidden && !contextLost && Boolean(renderer);
+      live &&
+      !reduceMotion &&
+      inViewport &&
+      !document.hidden &&
+      !contextLost &&
+      Boolean(renderer);
 
     const renderFrame = timestamp => {
       frame = 0;
@@ -271,7 +283,9 @@ export function TabletHero({
   height = tabletHeroGeometry.viewport.height,
   initialEntrance = true,
   liveBlob = true,
+  onShaderStateChange,
   reducedMotion,
+  shaderRevealed = true,
   width = tabletHeroGeometry.viewport.width,
 }) {
   const prefersReducedMotion = useReducedMotion();
@@ -282,7 +296,13 @@ export function TabletHero({
     reduceMotion,
   });
   const [blobState, setBlobState] = useState('initializing');
-  const handleBlobState = useCallback(state => setBlobState(state), []);
+  const handleBlobState = useCallback(
+    state => {
+      setBlobState(state);
+      onShaderStateChange?.(state);
+    },
+    [onShaderStateChange]
+  );
 
   return (
     <div className={styles.reviewStage}>
@@ -293,7 +313,11 @@ export function TabletHero({
         data-reduce-motion={Boolean(reduceMotion)}
         style={{ width, height }}
       >
-        <div className={styles.canvasLayer}>
+        <div
+          className={styles.canvasLayer}
+          data-shader-revealed={shaderRevealed}
+          data-shader-state={blobState}
+        >
           <div aria-hidden className={styles.blobFallback} />
           <TabletBlobCanvas
             forceWebglFailure={forceWebglFailure}
@@ -309,25 +333,42 @@ export function TabletHero({
           <div aria-hidden className={styles.headlineDepthLayer} />
           <header className={styles.copy}>
             <p className={styles.eyebrow} data-hero-geometry="eyebrow">
-              <TabletEyebrow animate={initialEntrance} reduceMotion={Boolean(reduceMotion)} />
+              <TabletEyebrow
+                animate={initialEntrance}
+                reduceMotion={Boolean(reduceMotion)}
+              />
             </p>
             <h1 className={styles.heading} id="tablet-hero-title">
               <VisuallyHidden>
                 Automation done. Capabilities also include funnels and workflows.
               </VisuallyHidden>
-              <span aria-hidden className={styles.capability} data-hero-geometry="capability">
-                <span className={styles.activeWord} data-initial={initialEntrance && !reduceMotion}>
+              <span
+                aria-hidden
+                className={styles.capability}
+                data-hero-geometry="capability"
+              >
+                <span
+                  className={styles.activeWord}
+                  data-initial={initialEntrance && !reduceMotion}
+                >
                   {activeWord}
                   <span className={styles.cover} data-phase={coverPhase} />
                 </span>
               </span>
               <span aria-hidden className={styles.done} data-hero-geometry="done">
-                <span className={styles.doneText} data-initial={initialEntrance && !reduceMotion}>
+                <span
+                  className={styles.doneText}
+                  data-initial={initialEntrance && !reduceMotion}
+                >
                   DONE.
                   <span className={styles.doneCover} />
                 </span>
               </span>
-              <span aria-hidden className={styles.accentLine} data-hero-geometry="divider" />
+              <span
+                aria-hidden
+                className={styles.accentLine}
+                data-hero-geometry="divider"
+              />
             </h1>
           </header>
         </div>
