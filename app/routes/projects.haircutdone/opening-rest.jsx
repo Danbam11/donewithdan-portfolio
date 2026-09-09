@@ -49,7 +49,7 @@ function ScrollExitWord({ children, startIndex, progress }) {
   ));
 }
 
-export function HaircutDoneBackBrush({ animated = false, className = '' }) {
+export function HaircutDoneBackBrush({ animated = false, className = '', href }) {
   const reducedMotion = useReducedMotion();
   const playIntro = animated && !reducedMotion;
   const BackBrush = playIntro ? motion.span : 'span';
@@ -61,18 +61,34 @@ export function HaircutDoneBackBrush({ animated = false, className = '' }) {
       }
     : {};
 
+  const artwork = (
+    <BackBrush
+      className={styles.brush}
+      aria-hidden="true"
+      {...backBrushRevealProps}
+      dangerouslySetInnerHTML={{ __html: brush }}
+    />
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={`${styles.back} ${className}`.trim()}
+        aria-label="Back to DonewithDan"
+      >
+        {artwork}
+      </a>
+    );
+  }
+
   return (
     <button
       type="button"
       className={`${styles.back} ${className}`.trim()}
       aria-label="Back navigation unavailable during build"
     >
-      <BackBrush
-        className={styles.brush}
-        aria-hidden="true"
-        {...backBrushRevealProps}
-        dangerouslySetInnerHTML={{ __html: brush }}
-      />
+      {artwork}
     </button>
   );
 }

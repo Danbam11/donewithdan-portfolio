@@ -3,7 +3,7 @@ import archivoBlack from '~/assets/fonts/Archivo_Black/ArchivoBlack-Regular.ttf'
 import interTightBlack from '~/assets/fonts/Inter_Tight/static/InterTight-Black.ttf';
 import interTightRegular from '~/assets/fonts/Inter_Tight/static/InterTight-Regular.ttf';
 import { baseMeta } from '~/utils/meta';
-import { HaircutDoneDesktopWebView } from './desktop-web-view';
+import { HaircutDoneResponsiveView } from './responsive-view';
 import styles from './route-shell.module.css';
 
 export const links = () =>
@@ -29,7 +29,7 @@ export function HaircutDone() {
 
   return (
     <div className={styles.route}>
-      <HaircutDoneDesktopWebView />
+      <HaircutDoneResponsiveView backHref="/" />
     </div>
   );
 }

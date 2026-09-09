@@ -33,10 +33,10 @@ const measureDesktopMetrics = () => {
   const viewportHeight = window.innerHeight;
   const widthScale = viewportWidth / MASTER_WIDTH;
   const heightScale = viewportHeight / MASTER_HEIGHT;
-  const scale = Math.min(
-    MAX_WEB_CONTENT_SCALE,
-    Math.max(1, Math.min(widthScale, heightScale))
-  );
+  const fitScale = Math.min(widthScale, heightScale);
+  const scale = viewportWidth < MASTER_WIDTH
+    ? Math.min(1, fitScale)
+    : Math.min(MAX_WEB_CONTENT_SCALE, Math.max(1, fitScale));
   const scaledWidth = MASTER_WIDTH * scale;
   const scaledMasterViewportHeight = MASTER_HEIGHT * scale;
   const viewportOffsetX = (viewportWidth - scaledWidth) / 2;
@@ -62,7 +62,7 @@ const metricsMatch = (current, next) =>
   current &&
   Object.keys(next).every(key => Math.abs(current[key] - next[key]) < 0.001);
 
-export function HaircutDoneDesktopWebView() {
+export function HaircutDoneDesktopWebView({ backHref }) {
   const [metrics, setMetrics] = useState(null);
 
   useClientLayoutEffect(() => {
@@ -179,7 +179,11 @@ export function HaircutDoneDesktopWebView() {
           height: backSize.height,
         }}
       >
-        <HaircutDoneBackBrush animated className={styles.fixedBackAnchor} />
+        <HaircutDoneBackBrush
+          animated
+          className={styles.fixedBackAnchor}
+          href={backHref}
+        />
       </div>
     </div>
   );

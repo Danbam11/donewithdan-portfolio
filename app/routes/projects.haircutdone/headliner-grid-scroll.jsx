@@ -363,7 +363,7 @@ export function HaircutDoneHeadlinerGridScroll({
       };
 
       return (
-        <main
+        <div
           className={`${styles.page} ${styles.webPage}`}
           style={{ width: webLayout.viewportWidth }}
         >
@@ -417,17 +417,17 @@ export function HaircutDoneHeadlinerGridScroll({
             }}
             aria-hidden="true"
           />
-        </main>
+        </div>
       );
     }
 
     return (
-      <main className={`${styles.page} ${styles.reducedPage}`}>
+      <div className={`${styles.page} ${styles.reducedPage}`}>
         {showFloatingBack && <HaircutDoneBackBrush className={styles.floatingBack} />}
         <HaircutDoneOpeningRest animated showBack={false} />
         <HaircutDoneScreenshotGridRest zoomable />
         <div className={styles.continuation} aria-hidden="true" />
-      </main>
+      </div>
     );
   }
 
@@ -497,7 +497,7 @@ export function HaircutDoneHeadlinerGridScroll({
 
   if (webLayout) {
     return (
-      <main
+      <div
         className={`${styles.page} ${styles.webPage}`}
         style={{ width: webLayout.viewportWidth }}
       >
@@ -548,12 +548,12 @@ export function HaircutDoneHeadlinerGridScroll({
           }}
           aria-hidden="true"
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       {showFloatingBack && <HaircutDoneBackBrush animated className={styles.floatingBack} />}
       <section
         ref={stageRef}
@@ -566,6 +566,6 @@ export function HaircutDoneHeadlinerGridScroll({
       </section>
 
       <div className={styles.continuation} aria-hidden="true" />
-    </main>
+    </div>
   );
 }
