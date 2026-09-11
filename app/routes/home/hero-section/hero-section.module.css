@@ -2,11 +2,24 @@
   .root {
     width: 100%;
     overflow-x: clip;
+    background: #000;
   }
 
   .pending {
     width: 100%;
-    min-height: 100dvh;
-    background: #0a0f10;;
+    min-height: calc(max(100dvh, 1000px, 64.75vw) + 164px);
+    background: #000;
+  }
+
+  @media (min-width: 697px) and (max-width: 1040px) {
+    .pending {
+      min-height: calc(max(100dvh, 1112px) + 168px);
+    }
+  }
+
+  @media (max-width: 696px) {
+    .pending {
+      min-height: calc(max(100dvh, 216.410256vw) + 144px);
+    }
   }
 }

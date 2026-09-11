@@ -267,7 +267,6 @@ function TabletBlobCanvas({
       canvas.removeEventListener('webglcontextlost', handleContextLost);
       if (scene) cleanScene(scene);
       renderer?.renderLists?.dispose();
-      renderer?.forceContextLoss?.();
       if (renderer) cleanRenderer(renderer);
       canvas.width = 0;
       canvas.height = 0;

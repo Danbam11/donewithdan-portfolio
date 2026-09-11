@@ -1,11 +1,14 @@
 {
-  "name": "Hamish Williams",
-  "role": "Designer",
-  "disciplines": ["Developer", "Prototyper", "Animator", "Illustrator", "Modder"],
-  "url": "https://hamishw.com",
-  "bluesky": "hamishw.com",
-  "figma": "@Hamish",
-  "github": "HamishMW",
-  "repo": "https://github.com/HamishMW/portfolio",
-  "ascii": "__  __  __\n\u005C \u005C \u005C \u005C \u005C\u2215\n \u005C \u005C\u2215\u005C \u005C\n  \u005C\u2215  \u005C\u2215\n"
+  "name": "DonewithDan",
+  "role": "Tech VA",
+  "disciplines": [
+    "GoHighLevel",
+    "Automation",
+    "Funnels",
+    "CRM",
+    "Customer Support"
+  ],
+  "github": "Danbam11",
+  "repo": "https://github.com/Danbam11/donewithdan-portfolio",
+  "ascii": "KEEP YOUR EXISTING ASCII VALUE HERE"
 }

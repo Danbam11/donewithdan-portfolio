@@ -9,6 +9,7 @@
   align-items: center;
   min-height: 100vh;
   width: 100%;
+  background: #000;
 
   @media (--mediaMobile) {
     padding-top: 0;

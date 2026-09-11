@@ -14,18 +14,19 @@
     bottom: 0;
     z-index: var(--zIndex4);
     isolation: isolate;
-    background: #0a0f10;
+    background: #000;
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       --headerNavFontSize: calc((22 / 16) * 1rem);
     }
 
-    @media (--mediaMobile) {
-      top: var(--spaceOuter);
-      left: var(--spaceOuter);
-      bottom: auto;
-      width: var(--space2XL);
-    }
+    @media (max-width: 1040px) {
+  top: var(--spaceOuter);
+  left: var(--spaceOuter);
+  bottom: auto;
+  width: var(--space2XL);
+  background: transparent;
+}
   }
 
   .logo {
@@ -37,7 +38,7 @@
     margin-top: 53px;
     z-index: var(--zIndex2);
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       padding: 0;
       width: 80px;
       height: 50px;
@@ -86,7 +87,7 @@
       }
     }
 
-    :is(a:hover, a:focus-visible) & .logoHighlight {
+    a:focus-visible & .logoHighlight {
       opacity: 1;
       transform: scale3d(1, 1, 1);
       transform-origin: bottom;
@@ -98,13 +99,33 @@
       }
     }
 
-    @media not (--mediaUseMotion) {
-      :is(a:hover, a:focus-visible) & .logoHighlight {
-        transform: none;
+    @media (hover: hover) and (pointer: fine) {
+      a:hover & .logoHighlight {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+        transform-origin: bottom;
+        transition: opacity 0.1s ease;
+
+        @media (--mediaUseMotion) {
+          transition: transform var(--durationM) var(--bezierFastoutSlowin),
+            opacity 0.1s ease;
+        }
       }
     }
 
-    @media (--mediaMobile) {
+    @media not (--mediaUseMotion) {
+      a:focus-visible & .logoHighlight {
+        transform: none;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        a:hover & .logoHighlight {
+          transform: none;
+        }
+      }
+    }
+
+    @media (max-width: 1040px) {
       width: 80px;
       height: 50px;
       margin: 0;
@@ -129,7 +150,7 @@
     flex: 1 1 auto;
     max-width: var(--space2XL);
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       display: none;
     }
   }
@@ -195,7 +216,7 @@
     gap: 4px;
     margin-bottom: 32px;
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       flex-direction: row;
       position: absolute;
       bottom: var(--spaceXL);
@@ -223,7 +244,7 @@
     color: var(--textLight);
     transition: color var(--durationM) var(--bezierFastoutSlowin);
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       width: 44px;
       height: 44px;
     }
@@ -249,7 +270,7 @@
     mask-size: contain;
     transition: background var(--durationM) ease;
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       width: 29px;
       height: 29px;
     }
@@ -260,7 +281,7 @@
 
     position: fixed;
     inset: 0;
-    background: color-mix(in lab, #0a0f10 92%, transparent);
+    background: #000;
     transform: translate3d(0, -100%, 0);
     transition-property: background;
     transition-duration: var(--durationL);
@@ -272,7 +293,7 @@
     -webkit-backdrop-filter: var(--backdrop);
     backdrop-filter: var(--backdrop);
 
-    @media (--mediaMobile) {
+    @media (max-width: 1040px) {
       display: flex;
     }
 

@@ -1,13 +1,9 @@
-import sprTextureLarge from '~/assets/spr-lesson-builder-dark-large.jpg';
-import sprTexturePlaceholder from '~/assets/spr-lesson-builder-dark-placeholder.jpg';
-import sprTexture from '~/assets/spr-lesson-builder-dark.jpg';
-import { Footer } from '~/components/footer';
 import { baseMeta } from '~/utils/meta';
-import { Intro } from './intro';
 import { Gaps } from './gaps';
-import { Profile } from './profile';
-import { ProjectSummary } from './project-summary';
-import { useEffect, useRef, useState } from 'react';
+import { HaircutDone } from './haircutdone';
+import { HeroSection } from './hero-section/hero-section';
+import { ProfileApprovedResponsive } from './profile-approved';
+import { SystemWorkflow } from './system/system';
 import config from '~/config.json';
 import styles from './home.module.css';
 
@@ -33,88 +29,29 @@ export const links = () => {
 
 export const meta = () => {
   return baseMeta({
-    title: 'Designer + Developer',
+    title: 'Tech VA',
     description: `Design portfolio of ${config.name} — a product designer working on web & mobile apps with a focus on motion, experience design, and accessibility.`,
   });
 };
 
 export const Home = () => {
-  const [visibleSections, setVisibleSections] = useState([]);
-  const [scrollIndicatorHidden, setScrollIndicatorHidden] = useState(false);
-  const intro = useRef();
-  const projectOne = useRef();
-  const details = useRef();
-
-  useEffect(() => {
-    const sections = [intro, projectOne, details];
-
-    const sectionObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const section = entry.target;
-            observer.unobserve(section);
-            if (visibleSections.includes(section)) return;
-            setVisibleSections(prevSections => [...prevSections, section]);
-          }
-        });
-      },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
-    );
-
-    const indicatorObserver = new IntersectionObserver(
-      ([entry]) => {
-        setScrollIndicatorHidden(!entry.isIntersecting);
-      },
-      { rootMargin: '-100% 0px 0px 0px' }
-    );
-
-    sections.forEach(section => {
-      sectionObserver.observe(section.current);
-    });
-
-    indicatorObserver.observe(intro.current);
-
-    return () => {
-      sectionObserver.disconnect();
-      indicatorObserver.disconnect();
-    };
-  }, [visibleSections]);
-
   return (
     <div className={styles.home}>
-      <Intro
-        id="intro"
-        sectionRef={intro}
-        scrollIndicatorHidden={scrollIndicatorHidden}
-      />
-      <ProjectSummary
-        id="project-1"
-        sectionRef={projectOne}
-        visible={visibleSections.includes(projectOne.current)}
-        index={1}
-        title="Designing the future of education"
-        description="Designing a platform to help educators build better online courseware"
-        buttonText="View project"
-        buttonLink="/projects/smart-sparrow"
-        model={{
-          type: 'laptop',
-          alt: 'Smart Sparrow lesson builder',
-          textures: [
-            {
-              srcSet: `${sprTexture} 1280w, ${sprTextureLarge} 2560w`,
-              placeholder: sprTexturePlaceholder,
-            },
-          ],
-        }}
-      />
+      <div id="hero">
+        <HeroSection />
+      </div>
+
+      <SystemWorkflow perspectiveEntrance />
+
       <Gaps />
-      <Profile
-        sectionRef={details}
-        visible={visibleSections.includes(details.current)}
-        id="details"
-      />
-      <Footer />
+
+      <div id="projects">
+        <HaircutDone href="/projects/haircutdone" />
+      </div>
+
+      <div id="profile" className={styles.profileSection}>
+        <ProfileApprovedResponsive />
+      </div>
     </div>
   );
 };

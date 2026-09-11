@@ -1,7 +1,7 @@
 .page {
   --haircutdone-case-study-scale: 1;
   --haircutdone-target-width: 390px;
-  --haircutdone-foreground-height: calc(1183px * var(--haircutdone-case-study-scale));
+  --haircutdone-foreground-height: calc(1311px * var(--haircutdone-case-study-scale));
   --haircutdone-footer-height: calc(256px * var(--haircutdone-case-study-scale));
   --haircutdone-footer-track-height: calc(512px * var(--haircutdone-case-study-scale));
 
@@ -22,9 +22,14 @@
 
 .foregroundScale {
   width: 390px;
-  height: 1183px;
+  height: 1311px;
   transform: scale(var(--haircutdone-case-study-scale));
   transform-origin: top left;
+}
+
+/* Space between screenshots and WALKTHROUGH */
+.foregroundScale > section:last-child {
+  margin-top: 64px;
 }
 
 .footerReveal {

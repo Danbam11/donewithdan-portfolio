@@ -6,7 +6,7 @@ import { Section } from '~/components/section';
 import { Loader } from '~/components/loader';
 import { Transition } from '~/components/transition';
 import { useHydrated } from '~/hooks/useHydrated';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import styles from './haircutdone.module.css';
 
 const Model = lazy(() =>
@@ -35,8 +35,35 @@ const usePointerMotionCapability = () => {
 
 export function HaircutDone({ href }) {
   const [modelLoaded, setModelLoaded] = useState(false);
+  const [shouldLoadModel, setShouldLoadModel] = useState(false);
+  const previewRef = useRef(null);
   const isHydrated = useHydrated();
   const enablePointerMotion = usePointerMotionCapability();
+
+  useEffect(() => {
+    const preview = previewRef.current;
+
+    if (!preview) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const [entry] = entries;
+
+        if (entry.isIntersecting) {
+          setShouldLoadModel(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px 0px 50% 0px',
+      }
+    );
+
+    observer.observe(preview);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <Section className={styles.section} as="section" aria-labelledby="haircutdone-title">
@@ -61,8 +88,7 @@ export function HaircutDone({ href }) {
                     data-visible={visible}
                     id="haircutdone-title"
                   >
-                    <span className={styles.heroLine}>See how it</span>
-                    <span className={styles.heroLine}>got</span>
+                    <span className={styles.heroLine}>See how it's</span>
                     <span className={styles.heroLine}>DONE.</span>
                   </Heading>
                   <div className={styles.cta} data-visible={visible}>
@@ -76,11 +102,14 @@ export function HaircutDone({ href }) {
           </Transition>
           </div>
 
-          <div className={styles.preview}>
-          {!modelLoaded && <Loader center className={styles.loader} />}
-          {isHydrated && (
-            <Suspense>
-              <Model
+          <div className={styles.preview} ref={previewRef}>
+  {shouldLoadModel && !modelLoaded && (
+    <Loader center className={styles.loader} />
+  )}
+
+  {isHydrated && shouldLoadModel && (
+    <Suspense>
+      <Model
                 alt="HaircutDone style-match quiz displayed on a laptop"
                 cameraPosition={{ x: 0, y: 0, z: 8 }}
                 className={styles.model}

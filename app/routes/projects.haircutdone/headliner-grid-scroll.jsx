@@ -248,18 +248,19 @@ export function HaircutDoneHeadlinerGridScroll({
   }, [centerProgress, gridProgress, isVisualGeometryReady, leftProgress, rightProgress]);
 
   const getGridZoomTarget = useCallback(() => {
-    const grid = gridCompositionRef.current;
-    if (!grid) return null;
+  const grid = gridCompositionRef.current;
+  if (!grid) return null;
 
-    const rect = grid.getBoundingClientRect();
+  const rect = grid.getBoundingClientRect();
+  const bleed = 4;
 
-    return {
-      left: rect.left,
-      top: rect.top,
-      width: rect.width,
-      height: rect.height,
-    };
-  }, []);
+  return {
+    left: rect.left - bleed,
+    top: rect.top - bleed,
+    width: rect.width + bleed * 2,
+    height: rect.height + bleed * 2,
+  };
+}, []);
 
   const prepareGridForInspection = useCallback(async () => {
     if (reducedMotion) return true;

@@ -142,6 +142,8 @@ function ZoomableScreenshotCard({ beforeOpen, getZoomTarget, screenshot }) {
       const rect = cardRef.current.getBoundingClientRect();
       const measuredZoomTarget = getZoomTarget?.();
 
+      console.log('GRID ZOOM TARGET:', measuredZoomTarget);
+
       if (getZoomTarget && !isValidZoomTarget(measuredZoomTarget)) return;
 
       setSourceRect({
@@ -182,16 +184,21 @@ function ZoomableScreenshotCard({ beforeOpen, getZoomTarget, screenshot }) {
   );
 
   const handleAnimationComplete = useCallback(() => {
-    if (phase === 'opening') {
-      setPhase('open');
-      return;
-    }
+  if (phase === 'opening') {
+    console.log(
+      'ACTUAL ZOOM FRAME:',
+      zoomFrameRef.current?.getBoundingClientRect()
+    );
 
-    if (phase === 'closing') {
-      setPhase('idle');
-      cardRef.current?.focus();
-    }
-  }, [phase]);
+    setPhase('open');
+    return;
+  }
+
+  if (phase === 'closing') {
+    setPhase('idle');
+    cardRef.current?.focus();
+  }
+}, [phase]);
 
   useEffect(() => {
     if (phase === 'open') zoomFrameRef.current?.focus();

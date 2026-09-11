@@ -1,41 +1,51 @@
 import { useReducedMotion } from 'framer-motion';
-import { useLocation, useNavigate } from '@remix-run/react';
 import { useCallback, useRef } from 'react';
 
 export function useScrollToHash() {
   const scrollTimeout = useRef();
-  const location = useLocation();
-  const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
 
   const scrollToHash = useCallback(
     (hash, onDone) => {
-      const id = hash.split('#')[1];
-      const targetElement = document.getElementById(id);
+      const id = hash?.replace(/^#/, '');
+      const targetElement = id ? document.getElementById(id) : null;
 
-      targetElement.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+      if (!targetElement) {
+        onDone?.();
+        return undefined;
+      }
+
+      let completed = false;
+
+      const finish = () => {
+        if (completed) return;
+
+        completed = true;
+        window.removeEventListener('scroll', handleScroll);
+        clearTimeout(scrollTimeout.current);
+        onDone?.();
+      };
 
       const handleScroll = () => {
         clearTimeout(scrollTimeout.current);
-
-        scrollTimeout.current = setTimeout(() => {
-          window.removeEventListener('scroll', handleScroll);
-
-          if (window.location.pathname === location.pathname) {
-            onDone?.();
-            navigate(`${location.pathname}#${id}`, { scroll: false });
-          }
-        }, 50);
+        scrollTimeout.current = setTimeout(finish, 120);
       };
 
-      window.addEventListener('scroll', handleScroll);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      targetElement.scrollIntoView({
+        behavior: reduceMotion ? 'auto' : 'smooth',
+        block: 'start',
+      });
+
+      scrollTimeout.current = setTimeout(finish, 120);
 
       return () => {
         window.removeEventListener('scroll', handleScroll);
         clearTimeout(scrollTimeout.current);
       };
     },
-    [navigate, reduceMotion, location.pathname]
+    [reduceMotion]
   );
 
   return scrollToHash;

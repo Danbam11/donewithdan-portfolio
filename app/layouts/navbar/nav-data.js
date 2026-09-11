@@ -5,11 +5,11 @@ import linkedinIcon from '~/assets/nav-bar/linkedin.svg';
 export const navLinks = [
   {
     label: 'Projects',
-    pathname: '/#project-1',
+    pathname: '/#projects',
   },
   {
     label: 'About',
-    pathname: '/articles',
+    pathname: '/#profile',
   },
   {
     label: 'Contact',

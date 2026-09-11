@@ -429,7 +429,6 @@ function TwistedBlobCanvas({
 
       if (scene) cleanScene(scene);
       renderer?.renderLists?.dispose();
-      renderer?.forceContextLoss?.();
       if (renderer) cleanRenderer(renderer);
 
       geometry = undefined;

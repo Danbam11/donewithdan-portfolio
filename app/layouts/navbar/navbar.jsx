@@ -25,12 +25,33 @@ export const Navbar = ({ prefetch = 'intent' }) => {
     setCurrent(`${location.pathname}${location.hash}`);
   }, [location]);
 
-  // Handle smooth scroll nav items
   useEffect(() => {
-    if (!target || location.pathname !== '/') return;
-    setCurrent(`${location.pathname}${target}`);
-    scrollToHash(target, () => setTarget(null));
-  }, [location.pathname, scrollToHash, target]);
+    if (location.pathname === '/' && location.hash) {
+      setTarget(location.hash);
+    }
+  }, [location.hash, location.pathname]);
+
+  // Handle smooth scroll nav items
+useEffect(() => {
+  if (!target || location.pathname !== '/') return;
+
+  setCurrent(`${location.pathname}${target}`);
+
+  return scrollToHash(target, () => {
+    setTarget(null);
+
+    // Remove the hash after the section has been reached.
+    // This prevents the browser from re-anchoring to the section
+    // when the viewport changes size.
+    if (window.location.hash) {
+      window.history.replaceState(
+        window.history.state,
+        '',
+        window.location.pathname
+      );
+    }
+  });
+}, [location.pathname, scrollToHash, target]);
 
   // Handle swapping the theme when intersecting with inverse themed elements
   useEffect(() => {
@@ -140,7 +161,7 @@ export const Navbar = ({ prefetch = 'intent' }) => {
       <RouterLink
         unstable_viewTransition
         prefetch={prefetch}
-        to="/#intro"
+        to="/#hero"
         data-navbar-item
         className={styles.logo}
         aria-label="DonewithDan"
