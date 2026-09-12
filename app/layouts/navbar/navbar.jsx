@@ -240,7 +240,7 @@ const NavbarIcons = ({ desktop }) => (
       >
         <span
           className={styles.navIcon}
-          style={{ '--icon-image': `url(${icon})` }}
+          style={{ '--icon-image': `url("${icon}")` }}
           aria-hidden="true"
         />
       </a>
