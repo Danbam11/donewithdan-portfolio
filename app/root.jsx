@@ -49,8 +49,8 @@ export const links = () => [
 export const loader = async ({ request, context }) => {
   const { url } = request;
   const { pathname } = new URL(url);
-  const pathnameSliced = pathname.endsWith('/') ? pathname.slice(0, -1) : url;
-  const canonicalUrl = `${config.url}${pathnameSliced}`;
+  const pathnameSliced = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  const canonicalUrl = config.url ? `${config.url}${pathnameSliced}` : null;
 
   const { getSession, commitSession } = createCookieSessionStorage({
     cookie: {
@@ -117,7 +117,7 @@ export default function App() {
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
         <Meta />
         <Links />
-        <link rel="canonical" href={canonicalUrl} />
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
       </head>
       <body data-theme={theme}>
         <ThemeProvider theme={theme} toggleTheme={toggleTheme}>

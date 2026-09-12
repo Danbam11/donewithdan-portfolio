@@ -1,7 +1,7 @@
 import config from '~/config.json';
 
 const { name, url, twitter } = config;
-const defaultOgImage = `${url}/social-image.png`;
+const defaultOgImage = url ? `${url}/social-image.png` : '/social-image.png';
 
 export function baseMeta({
   title,
@@ -22,13 +22,13 @@ export function baseMeta({
     { property: 'og:title', content: titleText },
     { property: 'og:site_name', content: name },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: url },
+    ...(url ? [{ property: 'og:url', content: url }] : []),
     { property: 'og:description', content: description },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:description', content: description },
     { property: 'twitter:title', content: titleText },
-    { property: 'twitter:site', content: url },
-    { property: 'twitter:creator', content: twitter },
+    ...(url ? [{ property: 'twitter:site', content: url }] : []),
+    ...(twitter ? [{ property: 'twitter:creator', content: twitter }] : []),
     { property: 'twitter:image', content: ogImage },
   ];
 }

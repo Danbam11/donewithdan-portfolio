@@ -1,9 +1,8 @@
 {
-  "name": "portfolio",
-  "homepage": "https://hamishw.com",
-  "description": "Portfolio site for Hamish Williams",
-  "repository": "https://github.com/HamishMW/portfolio.git",
-  "author": "Hamish Williams",
+  "name": "donewithdan-portfolio",
+  "description": "DonewithDan — Tech VA portfolio building GoHighLevel systems, funnels, CRM automation, bookings, and follow-ups.",
+  "repository": "https://github.com/Danbam11/donewithdan-portfolio.git",
+  "author": "DonewithDan",
   "sideEffects": false,
   "type": "module",
   "scripts": {

@@ -4,7 +4,6 @@ import { HaircutDone } from './haircutdone';
 import { HeroSection } from './hero-section/hero-section';
 import { ProfileApprovedResponsive } from './profile-approved';
 import { SystemWorkflow } from './system/system';
-import config from '~/config.json';
 import styles from './home.module.css';
 
 // Prefetch draco decoader wasm
@@ -30,7 +29,8 @@ export const links = () => {
 export const meta = () => {
   return baseMeta({
     title: 'Tech VA',
-    description: `Design portfolio of ${config.name} — a product designer working on web & mobile apps with a focus on motion, experience design, and accessibility.`,
+    description:
+      'Tech VA portfolio focused on GoHighLevel systems, funnels, CRM automation, bookings, follow-ups, and smoother customer journeys.',
   });
 };
 

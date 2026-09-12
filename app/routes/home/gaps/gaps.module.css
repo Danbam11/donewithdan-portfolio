@@ -67,13 +67,16 @@
   }
 
   .wordCovered {
-  color: #1b2021;
-  opacity: 1;
-}
+    color: #f7ffff;
+    opacity: 0.07;
+  }
 
-.wordExposed {
-  display: none;
-}
+  .wordExposed {
+    position: absolute;
+    inset: 0;
+    color: #f7ffff;
+    opacity: 0.19;
+  }
 
   .intro {
     position: relative;
@@ -401,30 +404,66 @@
   }
 
   @media (min-width: 1041px) {
+    /*
+     * Desktop/Web geometry is derived from the approved 1920px composition.
+     * 1920px remains unchanged; 1041–1919px scales proportionally.
+     * Stacking distances/timings are intentionally untouched.
+     */
+    .section {
+      --gapsPanelGap: min(3.333333vw, 64px);
+      --gapsPanelInset: min(2.916667vw, 56px);
+
+      padding-top: min(12.5vw, 240px);
+      padding-right: min(6.666667vw, 128px);
+      padding-bottom: min(15vw, 288px);
+      padding-left: min(10vw, 192px);
+    }
+
+    .header,
     .problems {
-  min-height: calc(min(58vw, 780px) + 210vh);
-  margin-top: 60vh;
-}
+      width: min(100%, 1600px);
+    }
+
+    .header {
+      min-height: min(22.395833vw, 430px);
+    }
+
+    .problems {
+      min-height: calc(min(58vw, 780px) + 210vh);
+      margin-top: 60vh;
+    }
+
+    .problem {
+      min-height: min(40.625vw, 780px);
+      padding-block: min(6.666667vw, 128px);
+    }
+
+    .copy {
+      width: min(100%, 24.166667vw, 464px);
+    }
 
     .copy h3 {
+      margin-top: min(1.25vw, 24px);
       font-size: clamp(2.25rem, 4.1vw, 5rem);
       white-space: nowrap;
     }
 
     .description {
-      font-size: clamp(1.21rem, 1.69vw, 1.7rem);
+      max-width: 100%;
+      margin-top: min(1.666667vw, 32px);
+      font-size: clamp(16px, 1.416667vw, 27.2px);
     }
 
     .number {
-      font-size: calc(var(--fontSizeBodyS) * 1.09);
+      font-size: clamp(13px, 0.908333vw, 17.44px);
     }
 
     .problem[data-problem='01'] .figure {
-      width: 525px;
+      width: min(27.34375vw, 525px);
     }
 
     .problem[data-problem='02'] .figure {
-      width: 495px;
+      width: min(25.78125vw, 495px);
     }
 
     .problem[data-problem='02'] .figure::before {
@@ -435,11 +474,11 @@
     }
 
     .problem[data-problem='02'] .copy {
-      transform: translateX(-40px);
+      transform: translateX(max(-40px, -2.083333vw));
     }
 
     .problem[data-problem='03'] .figure {
-      width: 545px;
+      width: min(28.385417vw, 545px);
     }
   }
 
@@ -495,33 +534,33 @@
 
   @media (min-width: 1041px) {
     .decorativeWord {
-      left: -17.21875px;
-      font-size: 314.96px;
+      left: max(-17.21875px, -0.89681vw);
+      font-size: min(16.404167vw, 314.96px);
       letter-spacing: 0;
     }
 
     .intro {
       position: absolute;
-      top: 140px;
-      left: 100px;
+      top: min(7.291667vw, 140px);
+      left: min(5.208333vw, 100px);
       display: block;
-      width: 760px;
+      width: min(39.583333vw, 760px);
       padding-bottom: 0;
     }
 
     .kicker {
-      font-size: 19px;
-      letter-spacing: 2.24px;
+      font-size: clamp(13px, 0.989583vw, 19px);
+      letter-spacing: clamp(1.2px, 0.116667vw, 2.24px);
     }
 
     .heading {
       position: absolute;
-      top: 19px;
+      top: min(0.989583vw, 19px);
       left: 0;
-      width: 760px;
+      width: min(39.583333vw, 760px);
       max-width: none;
-      height: 200px;
-      font-size: min(6.5vw, 93.6px);
+      height: min(10.416667vw, 200px);
+      font-size: min(4.875vw, 93.6px);
       letter-spacing: 0;
     }
 
@@ -531,13 +570,13 @@
 
     .heroLine + .heroLine {
       position: absolute;
-      top: 88.03125px;
+      top: min(4.584961vw, 88.03125px);
       left: 0;
       margin-top: 0;
     }
 
     .doneText {
-      margin-left: -10.078125px;
+      margin-left: max(-10.078125px, -0.524902vw);
     }
   }
 

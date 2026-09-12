@@ -536,18 +536,18 @@
   }
 
   @media (max-width: 1040px) {
-  .decorative {
-    color: #1b2021;
-  }
+    .decorative {
+      color: #1b2021;
+    }
 
-  .decorative[data-visible='true'] {
-    opacity: 1;
-  }
+    .decorative[data-visible='true'] {
+      opacity: 1;
+    }
 
-  .diagnostic {
-    padding-inline: 16px;
+    .diagnostic {
+      padding-inline: 16px;
+    }
   }
-}
 
   @media (prefers-reduced-motion: reduce) {
     .decorative {
@@ -564,23 +564,65 @@
     }
   }
 
+  /*
+   * Desktop/Web responsive repair
+   * 1920px remains the approved master.
+   * Geometry scales proportionally down to 1041px.
+   * Existing <=1040px tablet/mobile compositions above are untouched.
+   */
   @media (min-width: 1041px) {
-  .system {
-    margin-top: clamp(96px, 16vw, 240px);
-  }
+    .system {
+      --systemRail: clamp(92.171875px, 8.854167vw, 170px);
+      --systemBaseHeight: clamp(1083.265px, 104.060039vw, 1997.95275px);
+      --browserFrameHeight: clamp(505.374379px, 48.54701vw, 932.1026px);
+      --browserEdge: clamp(9.712414px, 0.932989vw, 17.913385px);
+      --browserBorder: clamp(1px, 0.071768vw, 1.37795px);
+      --browserChromeHeight: clamp(28.390133px, 2.727198vw, 52.362205px);
 
-  .decorative {
-    left: 5px;
-    color: #1b2021;
-    font-size: 314.96px;
-  }
+      width: calc(100% - var(--systemRail));
+      margin-top: clamp(130.125px, 12.5vw, 240px);
+      margin-left: var(--systemRail);
+    }
 
-  .decorative[data-visible='true'] {
-    opacity: 1;
-  }
+    .decorative {
+      top: clamp(33.602885px, 3.227943vw, 61.976503px);
+      left: clamp(2.710938px, 0.260417vw, 5px);
+      color: #1b2021;
+      font-size: clamp(170.767375px, 16.404167vw, 314.96px);
+    }
 
-  .eyebrow {
-    left: 122px;
+    .decorative[data-visible='true'] {
+      opacity: 1;
+    }
+
+    .eyebrow {
+      top: clamp(122.549767px, 11.772312vw, 226.028389px);
+      left: clamp(66.146875px, 6.354167vw, 122px);
+      font-size: clamp(14.498419px, 1.39274vw, 26.7406px);
+      letter-spacing: clamp(1.476387px, 0.141824vw, 2.72302px);
+    }
+
+    .oneJourney {
+      top: clamp(211.756647px, 20.341657vw, 390.559811px);
+      font-size: clamp(39.537614px, 3.798042vw, 72.9224px);
+    }
+
+    .everyStep,
+    .done {
+      top: clamp(257.882071px, 24.772533vw, 475.632638px);
+      font-size: clamp(65.890138px, 6.329504vw, 121.52648px);
+    }
+
+    .presentationStage {
+      top: clamp(319.043209px, 30.647763vw, 588.437042px);
+    }
+
+    .belowBoard p {
+      font-size: clamp(17.135944px, 1.646104vw, 31.6052px);
+    }
+
+    .cta {
+      margin-top: clamp(15.168801px, 1.457138vw, 27.97704px);
+    }
   }
-}
 }

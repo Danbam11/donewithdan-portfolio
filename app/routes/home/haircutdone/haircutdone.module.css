@@ -168,57 +168,72 @@
     }
   }
 
+  /*
+   * Desktop/Web geometry:
+   * 1920px = approved master.
+   * 1041–1919px scales proportionally from that master.
+   * >1920px is capped at the approved 1920 composition.
+   * Tablet/mobile rules below remain unchanged.
+   */
   @media (min-width: 1041px) {
-  .content {
-    --textColumnWidth: 40%;
+    .section {
+      padding-bottom: clamp(13.01px, 1.25vw, 24px);
+    }
+
+    .content {
+      --textColumnWidth: 40%;
+
+      width: min(57.083333vw, 1096px);
+      max-width: none;
+      column-gap: clamp(26.03px, 2.5vw, 48px);
+    }
+
+    .decorativeWord {
+      top: clamp(-130px, -6.770833vw, -70.48px);
+      left: clamp(-266px, -13.854167vw, -144.22px);
+      font-size: clamp(170.77px, 16.404167vw, 314.96px);
+      letter-spacing: 0;
+    }
+
+    .wordCovered {
+      color: #1b2021;
+      opacity: 1;
+    }
+
+    .wordExposed {
+      display: none;
+    }
+
+    .intro {
+      top: clamp(-3px, -0.15625vw, -1.63px);
+      left: clamp(-280px, -14.583333vw, -151.81px);
+      padding-left: clamp(69.96px, 6.71875vw, 129px);
+    }
+
+    .eyebrow {
+      position: relative;
+      top: 1px;
+      margin-bottom: 1px;
+      font-size: clamp(13px, 0.989583vw, 19px);
+      letter-spacing: 0;
+    }
+
+    .title.title[data-level='3'] {
+      max-width: none;
+      font-size: clamp(50.75px, 4.875vw, 93.6px);
+      margin-bottom: clamp(21.69px, 2.083333vw, 40px);
+    }
+
+    .heroLine {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .heroLine:last-child {
+      margin-left: 0;
+      margin-top: 1px;
+    }
   }
-
-  .decorativeWord {
-  top: -130px;
-  left: -266px;
-  font-size: 314.96px;
-  letter-spacing: 0;
-}
-
-  .wordCovered {
-    color: #1b2021;
-    opacity: 1;
-  }
-
-  .wordExposed {
-    display: none;
-  }
-
-  .intro {
-  top: -3px;
-  left: -280px;
-  padding-left: 129px;
-}
-
-  .eyebrow {
-    position: relative;
-    top: 1px;
-    margin-bottom: 1px;
-    font-size: 19px;
-    letter-spacing: 0;
-  }
-
-  .title.title[data-level='3'] {
-    max-width: none;
-    font-size: min(6.5vw, 93.6px);
-    margin-bottom: 40px;
-  }
-
-  .heroLine {
-    display: block;
-    white-space: nowrap;
-  }
-
-  .heroLine:last-child {
-    margin-left: 0;
-    margin-top: 1px;
-  }
-}
 
   @media (--mediaTablet) {
     .section {
@@ -300,65 +315,65 @@
     }
 
     .decorativeWord {
-  top: 373px;
-  left: 50%;
-  width: 607px;
-  height: 207px;
-  margin: 0;
-  font-size: 255px;
-  line-height: 0.9;
-  white-space: nowrap;
-  text-align: center;
-  transform: translateX(-50%);
-  z-index: 1;
-  pointer-events: none;
-}
+      top: 373px;
+      left: 50%;
+      width: 607px;
+      height: 207px;
+      margin: 0;
+      font-size: 255px;
+      line-height: 0.9;
+      white-space: nowrap;
+      text-align: center;
+      transform: translateX(-50%);
+      z-index: 1;
+      pointer-events: none;
+    }
 
-.intro {
-  z-index: 3;
-}
+    .intro {
+      z-index: 3;
+    }
 
-.intro > .eyebrow {
-  position: absolute;
-  top: 498px;
-  left: calc((100% - 576px) / 2);
-  width: 100px;
-  margin: 0;
-  font-size: 24.2px;
-  letter-spacing: 0;
-  z-index: 4;
-}
+    .intro > .eyebrow {
+      position: absolute;
+      top: 498px;
+      left: calc((100% - 576px) / 2);
+      width: 100px;
+      margin: 0;
+      font-size: 24.2px;
+      letter-spacing: 0;
+      z-index: 4;
+    }
 
-.intro > .title.title[data-level='3'] {
-  position: absolute;
-  top: 525px;
-  left: calc((100% - 576px) / 2);
-  width: 580px;
-  max-width: none;
-  margin: 0;
-  font-size: 80.67px !important;
-  line-height: 1;
-  z-index: 4;
-}
+    .intro > .title.title[data-level='3'] {
+      position: absolute;
+      top: 525px;
+      left: calc((100% - 576px) / 2);
+      width: 580px;
+      max-width: none;
+      margin: 0;
+      font-size: 80.67px !important;
+      line-height: 1;
+      z-index: 4;
+    }
 
-.heroLine {
-  display: block;
-  white-space: nowrap;
-}
+    .heroLine {
+      display: block;
+      white-space: nowrap;
+    }
 
-.heroLine:last-child {
-  margin-top: 0;
-}
+    .heroLine:last-child {
+      margin-top: 0;
+    }
 
-.intro > .cta {
-  position: absolute;
-  top: 691px;
-  left: calc((100% - 576px) / 2);
-  width: 395px;
-  height: 60px;
-  margin: 0;
-  z-index: 4;
-}
+    .intro > .cta {
+      position: absolute;
+      top: 691px;
+      left: calc((100% - 576px) / 2);
+      width: 395px;
+      height: 60px;
+      margin: 0;
+      z-index: 4;
+    }
 
     .intro > .cta button {
       --buttonFontSize: 18px;
@@ -436,20 +451,20 @@
     }
 
     .decorativeWord {
-  position: absolute;
-  top: 334px;
-  left: 50%;
-  width: 414px;
-  height: 143px;
-  margin: 0;
-  font-size: 128px;
-  line-height: 0.9;
-  white-space: nowrap;
-  text-align: center;
-  transform: translateX(-53%);
-  z-index: 1;
-  pointer-events: none;
-}
+      position: absolute;
+      top: 334px;
+      left: 50%;
+      width: 414px;
+      height: 143px;
+      margin: 0;
+      font-size: 128px;
+      line-height: 0.9;
+      white-space: nowrap;
+      text-align: center;
+      transform: translateX(-53%);
+      z-index: 1;
+      pointer-events: none;
+    }
 
     .intro {
       position: absolute;
@@ -484,9 +499,9 @@
     }
 
     .heroLine {
-  display: block;
-  white-space: nowrap;
-}
+      display: block;
+      white-space: nowrap;
+    }
 
     .heroLine:nth-child(2) {
       margin-top: 4.9px;
@@ -524,15 +539,15 @@
       margin-left: 12px;
     }
   }
-  
-  @media (max-width: 1040px) {
-  .wordCovered {
-    color: #1b2021;
-    opacity: 1;
-  }
 
-  .wordExposed {
-    display: none;
+  @media (max-width: 1040px) {
+    .wordCovered {
+      color: #1b2021;
+      opacity: 1;
+    }
+
+    .wordExposed {
+      display: none;
+    }
   }
-}
 }
