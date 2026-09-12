@@ -1,5 +1,5 @@
+import masterSvgUrl from './haircutdone-workflow.svg?url';
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-const MASTER_SVG_URL = new URL("./haircutdone-workflow.svg", import.meta.url);
 const EXPECTED_VIEW_BOX = "0 0 3980 2005.6584821479928";
 const TRAVEL_SPEED = 300;
 const MOTION_PATH_EXTENSION = 36;
@@ -1711,7 +1711,7 @@ export async function createHaircutDoneWorkflow(rootElement, options = {}) {
   }
 
   const autoStart = options.autoStart ?? true;
-  const assetUrl = options.assetUrl ?? MASTER_SVG_URL;
+  const assetUrl = options.assetUrl ?? masterSvgUrl;
   const development = Object.freeze({ ...(options.development ?? {}) });
   const cleanupCallbacks = [];
   let destroyed = false;
