@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import loomVideo from '~/assets/case-study/loom-video-clean.mp4';
 import styles from './mobile-loom.module.css';
+
+const loomVideo = '/media/loom-video-clean.mp4';
 
 const REVEAL_THRESHOLD = 0.18;
 const REVEAL_SEQUENCE_DURATION = 590;

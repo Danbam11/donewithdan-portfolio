@@ -1,8 +1,9 @@
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { useRef } from 'react';
-import loomVideo from '~/assets/case-study/loom-video-clean.mp4';
 import styles from './loom-walkthrough-rest.module.css';
+
+const loomVideo = '/media/loom-video-clean.mp4';
 
 export function HaircutDoneLoomWalkthroughRest({ animated = false, live = false }) {
   const reduceMotion = useReducedMotion();
